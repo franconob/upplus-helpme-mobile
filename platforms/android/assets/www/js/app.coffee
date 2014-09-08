@@ -11,7 +11,9 @@
 # org.apache.cordova.statusbar required
 angular.module("fitSOS", [
   "ionic"
-  "fitSOS.controllers"
+  "restangular",
+  "fitSOS.controllers",
+  "fitSOS.services"
 ]).run(($ionicPlatform) ->
   $ionicPlatform.ready ->
     cordova.plugins.Keyboard.hideKeyboardAccessoryBar true  if window.cordova and window.cordova.plugins.Keyboard
@@ -19,14 +21,27 @@ angular.module("fitSOS", [
     return
 
   return
-).config ($stateProvider, $urlRouterProvider) ->
-  $stateProvider.state("app",
+).config ($stateProvider, $urlRouterProvider, RestangularProvider) ->
+  RestangularProvider.setBaseUrl "http://192.168.0.12:1337"
+  $stateProvider.state("login",
     url: "/login"
     templateUrl: "templates/login.html"
     controller: "LoginCtrl"
+  ).state("homepage",
+    url: "/"
+    templateUrl: "templates/homepage.html"
+    controller: "HomepageCtrl"
+  ).state("proveedores",
+    url: "/proveedores"
+    templateUrl: "templates/proveedores.html"
+    controller: "ProveedoresCtrl"
   )
 
   # if none of the above states are matched, use this as the fallback
-  $urlRouterProvider.otherwise "/login"
+  $urlRouterProvider.otherwise "/"
   return
+
+ionic.Platform.ready () ->
+  console.log window.plugins.BackgroundJS
+
 

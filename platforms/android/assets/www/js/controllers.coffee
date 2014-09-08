@@ -1,4 +1,3 @@
-
 # Form data for the login modal
 
 # Create the login modal that we will use later
@@ -11,17 +10,28 @@
 
 # Simulate a login delay. Remove this and replace with your login
 # code if using a login system
-angular.module("fitSOS.controllers", []).controller("LoginCtrl", ($scope, $ionicModal, $timeout) ->
+
+controllers = angular.module("fitSOS.controllers", [])
+
+controllers.controller "LoginCtrl", ($scope, $state) ->
   $scope.loginData = {}
 
-  plugin = CC.CordovaFacebook();
-  plugin.init 'asdasdsad', 'FinderIT', [], (response) ->
-    console.log response
-
-  $scope.doLogin = ->
-    console.log "Doing login", $scope.loginData
+  $scope.doLogin = (loginData)->
+    $state.transitionTo('proveedores')
     return
 
+controllers.controller "HomepageCtrl", ($scope) ->
   return
-)
+
+controllers.controller "ProveedoresCtrl", ["$scope", "Proveedores", ($scope, Proveedores) ->
+  req = Proveedores.getList()
+  req.then (result) ->
+    console.log result
+    $scope.proveedores = result
+
+  req.catch((error) ->
+    console.log 'mail', error
+  )
+]
+
 
