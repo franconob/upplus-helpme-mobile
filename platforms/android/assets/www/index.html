@@ -21,17 +21,27 @@
     <!-- libs -->
     <script src="lib/lodash/dist/lodash.min.js"></script>
     <script src="lib/restangular/dist/restangular.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/socket.io/0.9.16/socket.io.min.js"></script>
+
+    <script src="lib/sails.io.js/sails.io.js"></script>
+    <script type="text/javascript">
+        io.sails.url = 'http://192.168.56.1:1337';
+        sock = io.connect();
+    </script>
+    <script src="lib/angular-socket-io/socket.js"></script>
 
     <!-- your app's js -->
-    <script src="lib/OpenFB/openfb.js"></script>
     <script src="js/app.js"></script>
     <script src="js/services.js"></script>
     <script src="js/controllers.js"></script>
 </head>
 
-<body ng-app="fitSOS" class="platform-android platform-cordova platform-webview">
-<ion-nav-bar title="Búsqueda" class="bar-clear" animation="nav-title-slide-ios7">
+<body ng-app="fitSOS" ng-controller="MainCtrl" class="platform-android platform-cordova platform-webview">
+<ion-nav-bar title="Búsqueda" class="bar-positive" animation="nav-title-slide-ios7">
     <ion-nav-back-button class="button-dark"><i class="ion-arrow-left-c"></i> Back</ion-nav-back-button>
+    <ion-nav-buttons side="right">
+        <button class="button button-dark" ng-click="goToMessages()">Boton ({{ message_count }}}</button>
+    </ion-nav-buttons>
 </ion-nav-bar>
 <ion-nav-view animation="slide-left-right"></ion-nav-view>
 </body>

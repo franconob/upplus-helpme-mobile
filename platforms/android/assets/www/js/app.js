@@ -6,11 +6,11 @@ angular.module("fitSOS", ["ionic", "restangular", "fitSOS.controllers", "fitSOS.
         if (window.StatusBar) {
             StatusBar.styleDefault();
         }
+
     });
-}).config(function ($stateProvider, $urlRouterProvider, RestangularProvider) {
-    RestangularProvider.setBaseUrl("http://192.168.56.1:1337");
-    //RestangularProvider.setJsonp(true);
-    //RestangularProvider.setDefaultRequestParams('jsonp', {callback: 'JSON_CALLBACK'});
+}).config(function ($stateProvider, $urlRouterProvider, RestangularProvider, socketProvider) {
+    RestangularProvider.setBaseUrl("http://192.168.56.1:1337/api");
+    socketProvider.setSocket(io);
     $stateProvider.state("login", {
         url: "/login",
         templateUrl: "templates/login.html",
@@ -24,14 +24,18 @@ angular.module("fitSOS", ["ionic", "restangular", "fitSOS.controllers", "fitSOS.
         templateUrl: "templates/proveedores.html",
         controller: "ProveedoresCtrl"
     }).state("chat", {
-        url: "/proveedores/chat",
+        url: "/proveedores/chat/:id",
         templateUrl: "templates/proveedores/show.html",
-        controller: "ProveedoresCtrl"
+        controller: "ChatCtrl"
+    }).state("messages", {
+        url: "/proveedores/messages",
+        templateUrl: "templates/proveedores/messages.html",
+        controller: "MessagesCtrl"
     });
 
     $urlRouterProvider.otherwise("/");
 });
 
 ionic.Platform.ready(function () {
-    return console.log(window.plugins.BackgroundJS);
+
 });

@@ -1,18 +1,15 @@
-function SocketIO(io, $rootScope) {
+function SocketIO(io, $rootScope, SessionService) {
     this.io = io;
 
     var self = this;
     this.users = [];
-    this.loggedUser = {};
 
     $rootScope.users = [];
     $rootScope.usuario = {};
 
     this.io.socket.on('connect', function () {
-        console.log('conectado!');
-
         self.io.socket.on('hello', function (user) {
-            self.loggedUser = user;
+            SessionService.user = user;
         });
 
         self.io.socket.on('chatuser', function (message) {
@@ -26,7 +23,10 @@ function SocketIO(io, $rootScope) {
                             });
                         }
                     });
-                    if (message.previous.name == null && self.loggedUser.id == message.id) {
+
+                    console.log('debug', message.previous.name, SessionService.user.id);
+                    if (message.previous.name == null && SessionService.user.id == message.id) {
+                        console.log('llega!!');
                         $rootScope.$broadcast('user.session.updated', message.data);
                     }
                     break;
@@ -44,6 +44,14 @@ function SocketIO(io, $rootScope) {
                     break;
                 }
 
+                case 'messaged':
+                {
+                    if(message.data.from.id !== SessionService.user.id) {
+                        $rootScope.$broadcast('notifications.messages.received');
+                    }
+                    $rootScope.$broadcast('user.messaged', message);
+                    break;
+                }
             }
         });
     });
@@ -57,7 +65,8 @@ function SocketIO(io, $rootScope) {
     return {
         authenticated: false,
         username: null,
-        id: null
+        id: null,
+        user: {}
     }
 }).provider('socket', function socketProvider() {
 
@@ -65,8 +74,8 @@ function SocketIO(io, $rootScope) {
         this.io = io;
     };
 
-    this.$get = ["$rootScope", function ($rootScope) {
-        return new SocketIO(io, $rootScope);
+    this.$get = ["$rootScope", "SessionService", function ($rootScope, SessionService) {
+        return new SocketIO(io, $rootScope, SessionService);
     }];
 
 });

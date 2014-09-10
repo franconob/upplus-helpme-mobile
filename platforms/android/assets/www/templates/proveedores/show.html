@@ -1,8 +1,23 @@
-<div class="bar bar-footer item item-input-inset">
-    <label class="item-input-wrapper">
-        <input type="text" placeholder="Mensaje">
-    </label>
-    <button class="button button-small">
-        Enviar
-    </button>
-</div>
+<ion-view>
+    <ion-content>
+        <ion-scroll>
+            <ion-list>
+                <ion-item ng-repeat="message in messages" class="item-avatar">
+                    <img src="/img/user_default.png"/>
+                    <p>{{ message.time }}</p>
+                    <h2>{{ message.msg}}</h2>
+                </ion-item>
+            </ion-list>
+        </ion-scroll>
+    </ion-content>
+
+    <div class="bar bar-footer item-input-inset">
+        <label class="item-input-wrapper">
+            <input type="text" ng-model="message" placeholder="Mensaje">
+        </label>
+        <button class="button button-small" ng-click="send(message)">
+            Enviar
+        </button>
+    </div>
+</ion-view>
+

@@ -7663,3 +7663,22 @@ a.button {
 .platform-c:not(.enable-transitions) * {
   -webkit-transition: none !important;
   transition: none !important; }
+
+form i.icon.error {
+  color: #ef4e3a; }
+
+form input + i.icon.error {
+  display: none;
+  margin-left: 8px; }
+
+form.ng-submitted input.ng-invalid + i.icon.error {
+  display: block; }
+
+form .has-error {
+  border-left: 5px solid #cc2311; }
+
+form .has-success {
+  border-left: 5px solid #d39211; }
+
+form.ng-submitted input.ng-valid + i.icon.error {
+  display: none; }

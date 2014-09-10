@@ -2,8 +2,10 @@
     <ion-content>
         <ion-scroll>
             <ion-list>
-                <ion-item ng-repeat="message in messages">
-                    {{ message.text }}
+                <ion-item ng-repeat="message in messages" class="item-avatar">
+                    <img src="/img/user_default.png"/>
+                    <p>{{ message.time }}</p>
+                    <h2>{{ message.msg}}</h2>
                 </ion-item>
             </ion-list>
         </ion-scroll>

@@ -12,13 +12,14 @@ controllers.controller("LoginCtrl", ["$rootScope", "$scope", "$state", "SessionS
 
     return $scope.doLogin = function (loginData) {
 
-        var user = _.find(users, {'email': loginData.username, 'password': loginData.password});
+        var user = _.find(users, {'email': loginData.username});
         if (user) {
             SessionService.authenticated = true;
             SessionService.username = loginData.username;
             SessionService.id = loginData.id;
-            socket.io.socket.put('/api/chatuser/' + socket.loggedUser.id, {name: SessionService.username}, function (user) {
-                $rootScope.usuario.name = user.name;
+
+            socket.io.socket.put('/api/chatuser/' + SessionService.user.id, {name: SessionService.username}, function (user) {
+                $scope.usuario.name = user.name;
             });
 
             $state.transitionTo('proveedores');
@@ -26,15 +27,22 @@ controllers.controller("LoginCtrl", ["$rootScope", "$scope", "$state", "SessionS
     };
 }]);
 
-controllers.controller("MainCtrl", function ($scope, $state, socket, $rootScope) {
+controllers.controller("MainCtrl", function ($scope, $state, socket) {
     $scope.messages = [];
     $scope.message_count = 0;
+    $scope.usuario = {};
 
     $scope.$on('user.session.updated', function (evt, args) {
         $scope.$apply(function () {
             $scope.usuario = args;
         });
     })
+
+    $scope.$on('notifications.messages.received', function() {
+        $scope.$apply(function() {
+            $scope.message_count++;
+        })
+    });
 
     $scope.goToMessages = function () {
         $state.transitionTo("messages");
@@ -76,13 +84,16 @@ controllers.controller("ChatCtrl", ["$scope", "$stateParams", "socket", function
 
     $scope.send = function (message) {
         socket.io.socket.post('/api/chat/message/', {to: userid, msg: message});
-    }
+    };
 
-    socket.io.socket.on('chatuser', function (event) {
-        if (event.verb == 'messaged') {
-            $scope.messages.push({text: event.data.msg});
-        }
+    $scope.$on('user.messaged', function(evt, message) {
+        $scope.$apply(function() {
+            message.data.time = new Date().toLocaleString();
+            $scope.messages.push(message.data);
+        })
     });
+
+
 
 }]);
 
