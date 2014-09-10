@@ -1,17 +1,10 @@
-<ion-view>
-    <ion-header-bar>
-        <h1 class="title">Búsqueda</h1>
-    </ion-header-bar>
+<ion-view title="Proveedores ({{usuario.name}})">
     <ion-content>
-        <div class="list">
-            <a ng-repeat="user in users" ui-sref="chat({id: user.id})"
-               class="item item-thumbnail-left">
-                <img ng-src="{{ user.profiles.0.avatar }}"/>
-
-                <h2>{{ user.name }}</h2>
-
-                <p>{{ user.extras.0.value }}</p>
-            </a>
-        </div>
+        <ion-list>
+            <ion-item ng-repeat="user in users" ui-sref="chat({id: user.id})">
+                {{ user.name }}
+            </ion-item>
+        </ion-list>
     </ion-content>
 </ion-view>
+
