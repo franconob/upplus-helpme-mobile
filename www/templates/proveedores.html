@@ -17,12 +17,12 @@
         </div>
 
         <ion-list>
-            <ion-item class="item item-avatar" ng-repeat="user in users|filter:keyword" ui-sref="homepage.chat({id: user.userid})">
+            <ion-item class="item item-avatar" ng-repeat="user in users|filter:keyword" ng-click="openSheet(user.userid)">
                 <img ng-src="{{user.juser.profile.avatar}}"/>
 
                 <h2>{{ user.juser.name }}</h2>
-
                 <p>Descripcion corta</p>
+
             </ion-item>
         </ion-list>
     </ion-content>

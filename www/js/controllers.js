@@ -36,7 +36,7 @@ controllers.controller("MainCtrl", function ($scope, $state) {
 
 
     $scope.$on('user.messaged', function (evt, message) {
-            $scope.incommingMessages.push(message);
+        $scope.incommingMessages.push(message);
     });
 });
 
@@ -44,7 +44,7 @@ controllers.controller("HomepageCtrl", function ($scope) {
 });
 
 controllers.controller("ProveedoresCtrl", [
-    "$scope", "socket", "$window", function ($scope, socket, $window) {
+    "$scope", "socket", "$window", "$ionicActionSheet", "$state", function ($scope, socket, $window, $ionicActionSheet, $state) {
         $scope.$on('user.added', function (evt, args) {
             $scope.$apply(function () {
                 $scope.users.push(args);
@@ -70,6 +70,21 @@ controllers.controller("ProveedoresCtrl", [
                 $scope.users = users;
             })
         });
+
+        $scope.openSheet = function (id) {
+            $ionicActionSheet.show({
+                buttons: [
+                    {text: '<i class="icon ion-person"></i> Ver perfil'},
+                    {text: '<i class="icon ion-chatbox"></i> Enviar mensaje'}
+                ],
+                titleText: "Acciones",
+                buttonClicked: function (index) {
+                    if (1 == index) {
+                        $state.transitionTo('homepage.chat', {id: id})
+                    }
+                }
+            })
+        }
     }
 ]);
 
@@ -85,6 +100,7 @@ controllers.controller("ChatCtrl", ["$scope", "$rootScope", "$stateParams", "soc
             }
         });
         $scope.messages.push({msg: message, time: new Date().toLocaleString()});
+        $scope.message = "";
     };
 
     $scope.$on('user.messaged', function (evt, message) {
