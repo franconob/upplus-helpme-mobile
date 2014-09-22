@@ -1,4 +1,4 @@
-angular.module("fitSOS", ["ionic", "restangular", "fitSOS.controllers", "fitSOS.services", "ngCordova"]).run(function ($ionicPlatform, $rootScope, SessionService, $state) {
+angular.module("fitSOS", ["ionic", "restangular", "fitSOS.controllers", "fitSOS.services", "helpme.directives", "ngCordova"]).run(function ($ionicPlatform, $rootScope, SessionService, $state) {
     $ionicPlatform.ready(function () {
         if (window.cordova && window.cordova.plugins.Keyboard) {
             cordova.plugins.Keyboard.hideKeyboardAccessoryBar(true);
@@ -22,7 +22,7 @@ angular.module("fitSOS", ["ionic", "restangular", "fitSOS.controllers", "fitSOS.
     $stateProvider
         .state('root', {
             url: '/',
-            controller: function($state) {
+            controller: function ($state) {
                 $state.transitionTo('login')
             },
             data: {
@@ -55,23 +55,23 @@ angular.module("fitSOS", ["ionic", "restangular", "fitSOS.controllers", "fitSOS.
             data: {
                 requiresLogin: true
             }
-        }).state("homepage.chat", {
-            url: "/home/proveedores/chat/:id",
-            views: {
-                menuContent: {
-                    templateUrl: "templates/proveedores/show.html",
-                    controller: "ChatCtrl"
-                }
-            },
-            data: {
-                requiresLogin: true
-            }
         }).state("homepage.messages", {
             url: "/home/proveedores/messages",
             views: {
                 menuContent: {
                     templateUrl: "templates/proveedores/messages.html",
                     controller: "MessagesCtrl"
+                }
+            },
+            data: {
+                requiresLogin: true
+            }
+        }).state("homepage.chat", {
+            url: "/home/proveedores/chat/:id",
+            views: {
+                menuContent: {
+                    templateUrl: "templates/proveedores/show.html",
+                    controller: "ChatCtrl"
                 }
             },
             data: {

@@ -1,4 +1,4 @@
-function SocketIO(socket, $rootScope, SessionService) {
+function SocketIO(socket, $rootScope) {
     this.socket = socket;
 
     var self = this;
@@ -8,7 +8,7 @@ function SocketIO(socket, $rootScope, SessionService) {
     $rootScope.usuario = {};
 
     this.socket.on('connect', function () {
-          self.socket.on('sessionuser', function (message) {
+        self.socket.on('sessionuser', function (message) {
             switch (message.verb) {
                 case 'updated':
                 {
@@ -20,9 +20,6 @@ function SocketIO(socket, $rootScope, SessionService) {
                         }
                     });
 
-                    if (message.previous.name == null && SessionService.user.id == message.id) {
-                        $rootScope.$broadcast('user.session.updated', message.data);
-                    }
                     break;
                 }
                 case 'created':
@@ -40,9 +37,6 @@ function SocketIO(socket, $rootScope, SessionService) {
 
                 case 'messaged':
                 {
-                    if (message.data.from.id !== SessionService.user.id) {
-                        $rootScope.$broadcast('notifications.messages.received');
-                    }
                     $rootScope.$broadcast('user.messaged', message);
                     break;
                 }
@@ -51,16 +45,33 @@ function SocketIO(socket, $rootScope, SessionService) {
     });
 }
 
-(angular.module("fitSOS.services", [])).factory("Users", [
-    "Restangular", function (Restangular) {
-        return Restangular.service('user');
-    }
-]).factory("SessionService", function () {
+angular.module('fitSOS.services', []).factory("SessionService", function (Restangular, $window, $rootScope, socket) {
     return {
         authenticated: false,
         username: null,
         id: null,
-        user: {}
+        user: {},
+        login: function (credentials, callback) {
+            var self = this;
+            Restangular.all('user').all('login').post(credentials).then(function (resp) {
+                    $window.sessionStorage.token = resp.data.token;
+                    self.authenticated = true;
+                    self.user = resp.data;
+                    var user = {
+                        name: self.user.username,
+                        userid: self.user.id
+                    };
+                    var headers = {
+                        Authorization: $window.sessionStorage.token
+                    };
+                    socket.socket.post('/sessionuser/create', {user: user, headers: headers}, function (data) {
+                        $rootScope.user = data;
+                    });
+                return callback(resp);
+            }, function(resp) {
+                return callback(resp);
+            });
+        }
     }
 }).provider('socket', function socketProvider() {
 
@@ -68,8 +79,8 @@ function SocketIO(socket, $rootScope, SessionService) {
         this.io = sock;
     };
 
-    this.$get = ["$rootScope", "SessionService", function ($rootScope, SessionService) {
-        return new SocketIO(this.io, $rootScope, SessionService);
+    this.$get = ["$rootScope", function ($rootScope) {
+        return new SocketIO(this.io, $rootScope);
     }];
 
 }).factory('TokenInterceptor', function ($q, $window) {
@@ -86,14 +97,14 @@ function SocketIO(socket, $rootScope, SessionService) {
             return response || $q.when(response);
         }
     };
-}).factory('LoadingService', function($ionicLoading) {
+}).factory('LoadingService', function ($ionicLoading) {
     return {
-        show: function(template) {
+        show: function (template) {
             $ionicLoading.show({
                 template: '<i class="icon ion-loading-c"></i> ' + template
             });
         },
-        hide: function() {
+        hide: function () {
             $ionicLoading.hide();
         }
     }

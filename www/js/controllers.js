@@ -2,34 +2,17 @@ var controllers;
 
 controllers = angular.module("fitSOS.controllers", []);
 
-controllers.controller("LoginCtrl", ["$scope", "$state", "SessionService", "Restangular", "$window", "socket", "$ionicPopup", "LoadingService", function ($scope, $state, SessionService, Restangular, $window, socket, $ionicPopup, LoadingService) {
+controllers.controller("LoginCtrl", ["$scope", "$state", "SessionService", "$ionicPopup", "LoadingService", function ($scope, $state, SessionService, $ionicPopup, LoadingService) {
     $scope.loginData = {};
     $scope.showBar = false;
 
-    return $scope.login = function (loginData) {
+    return $scope.login = function (credentials) {
         LoadingService.show('Comprobando credenciales...');
-        Restangular.all("user").all("login").post(loginData).then(function (resp) {
-            if (resp.status == 200) {
-                LoadingService.hide();
-                $window.sessionStorage.token = resp.data.token;
-                SessionService.authenticated = true;
-                SessionService.username = loginData.username;
-                SessionService.id = resp.data.id;
-                var user = {
-                    name: SessionService.username,
-                    userid: SessionService.id
-                };
-                var headers = {
-                    Authorization: $window.sessionStorage.token
-                };
-                socket.socket.post('/sessionuser/create', {user: user, headers: headers}, function (data) {
-                    $scope.user = data;
-                });
-                $state.transitionTo('homepage.proveedores');
-            }
-        }, function (response) {
+        SessionService.login(credentials, function (response) {
             LoadingService.hide();
-            if (response.status == 401) {
+            if (response.status == 200) {
+                $state.transitionTo('homepage.proveedores');
+            } else {
                 $ionicPopup.alert({
                     title: '<i class="icon ion-alert-circled"></i>  Usuario o contraseña inválida',
                     template: 'Compruebe las credenciales'
@@ -39,22 +22,22 @@ controllers.controller("LoginCtrl", ["$scope", "$state", "SessionService", "Rest
     }
 }]);
 
-controllers.controller("MainCtrl", function ($scope, $state, socket) {
+controllers.controller("MainCtrl", function ($scope, $state) {
     $scope.messages = [];
-    $scope.message_count = 0;
+    $scope.messageCount = 0;
     $scope.user = {};
     $scope.messages = [];
     $scope.total_users = 0;
-
-    $scope.$on('notifications.messages.received', function () {
-        $scope.$apply(function () {
-            $scope.message_count++;
-        })
-    });
+    $scope.incommingMessages = [];
 
     $scope.goToMessages = function () {
         $state.transitionTo("messages");
-    }
+    };
+
+
+    $scope.$on('user.messaged', function (evt, message) {
+            $scope.incommingMessages.push(message);
+    });
 });
 
 controllers.controller("HomepageCtrl", function ($scope) {
@@ -66,7 +49,7 @@ controllers.controller("ProveedoresCtrl", [
             $scope.$apply(function () {
                 $scope.users.push(args);
             })
-        })
+        });
 
         $scope.$on('user.destroyed', function (evt, id) {
             var index = _.findIndex($scope.users, function (user) {
@@ -86,8 +69,7 @@ controllers.controller("ProveedoresCtrl", [
             $scope.$apply(function () {
                 $scope.users = users;
             })
-        })
-
+        });
     }
 ]);
 
@@ -121,6 +103,23 @@ controllers.controller("ChatCtrl", ["$scope", "$rootScope", "$stateParams", "soc
     });
 
 
+}]);
+
+controllers.controller("NotificationsCtrl", ["$scope", "$state", "$ionicPopover", function ($scope, $state, $ionicPopover) {
+    $scope.goToChat = function (id) {
+        $state.transitionTo("homepage.chat", {id: id});
+        $scope.popover.hide();
+    };
+
+    $ionicPopover.fromTemplateUrl('popover.html', {
+        scope: $scope
+    }).then(function (popover) {
+        $scope.popover = popover;
+    });
+
+    $scope.openPopover = function ($event) {
+        $scope.popover.show($event);
+    };
 }]);
 
 controllers.controller("MessagesCtrl", ["$scope", "socket", function ($scope, socket) {
