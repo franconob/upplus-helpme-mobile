@@ -1,5 +1,19 @@
 /home/fherrero/workspace/test.workspace/abogados/platforms/android/ant-build/classes.dex : \
 /home/fherrero/workspace/test.workspace/abogados/platforms/android/ant-build/classes/org/apache/cordova/device/Device.class \
+/home/fherrero/workspace/test.workspace/abogados/platforms/android/ant-build/classes/org/apache/cordova/inappbrowser/InAppBrowser$3.class \
+/home/fherrero/workspace/test.workspace/abogados/platforms/android/ant-build/classes/org/apache/cordova/inappbrowser/InAppBrowser$5$4.class \
+/home/fherrero/workspace/test.workspace/abogados/platforms/android/ant-build/classes/org/apache/cordova/inappbrowser/InAppBrowser$4.class \
+/home/fherrero/workspace/test.workspace/abogados/platforms/android/ant-build/classes/org/apache/cordova/inappbrowser/InAppBrowser$InAppBrowserClient.class \
+/home/fherrero/workspace/test.workspace/abogados/platforms/android/ant-build/classes/org/apache/cordova/inappbrowser/InAppBrowser$1.class \
+/home/fherrero/workspace/test.workspace/abogados/platforms/android/ant-build/classes/org/apache/cordova/inappbrowser/InAppBrowser$5$3.class \
+/home/fherrero/workspace/test.workspace/abogados/platforms/android/ant-build/classes/org/apache/cordova/inappbrowser/InAppBrowser$2.class \
+/home/fherrero/workspace/test.workspace/abogados/platforms/android/ant-build/classes/org/apache/cordova/inappbrowser/InAppBrowser$5.class \
+/home/fherrero/workspace/test.workspace/abogados/platforms/android/ant-build/classes/org/apache/cordova/inappbrowser/InAppBrowser$4$1.class \
+/home/fherrero/workspace/test.workspace/abogados/platforms/android/ant-build/classes/org/apache/cordova/inappbrowser/InAppBrowser.class \
+/home/fherrero/workspace/test.workspace/abogados/platforms/android/ant-build/classes/org/apache/cordova/inappbrowser/InAppBrowser$5$2.class \
+/home/fherrero/workspace/test.workspace/abogados/platforms/android/ant-build/classes/org/apache/cordova/inappbrowser/InAppChromeClient.class \
+/home/fherrero/workspace/test.workspace/abogados/platforms/android/ant-build/classes/org/apache/cordova/inappbrowser/InAppBrowserDialog.class \
+/home/fherrero/workspace/test.workspace/abogados/platforms/android/ant-build/classes/org/apache/cordova/inappbrowser/InAppBrowser$5$1.class \
 /home/fherrero/workspace/test.workspace/abogados/platforms/android/ant-build/classes/org/java_websocket/SSLSocketChannel2.class \
 /home/fherrero/workspace/test.workspace/abogados/platforms/android/ant-build/classes/org/java_websocket/WebSocketFactory.class \
 /home/fherrero/workspace/test.workspace/abogados/platforms/android/ant-build/classes/org/java_websocket/handshake/ServerHandshakeBuilder.class \
@@ -74,4 +88,13 @@
 /home/fherrero/workspace/test.workspace/abogados/platforms/android/ant-build/classes/com/ionicframework/abogados218916/R$drawable.class \
 /home/fherrero/workspace/test.workspace/abogados/platforms/android/ant-build/classes/com/ionicframework/abogados218916/R.class \
 /home/fherrero/workspace/test.workspace/abogados/platforms/android/ant-build/classes/com/ionicframework/abogados218916/R$attr.class \
+/home/fherrero/workspace/test.workspace/abogados/platforms/android/ant-build/classes/de/appplant/cordova/plugin/localnotification/LocalNotification.class \
+/home/fherrero/workspace/test.workspace/abogados/platforms/android/ant-build/classes/de/appplant/cordova/plugin/localnotification/LocalNotification$3.class \
+/home/fherrero/workspace/test.workspace/abogados/platforms/android/ant-build/classes/de/appplant/cordova/plugin/localnotification/Options.class \
+/home/fherrero/workspace/test.workspace/abogados/platforms/android/ant-build/classes/de/appplant/cordova/plugin/localnotification/LocalNotification$1.class \
+/home/fherrero/workspace/test.workspace/abogados/platforms/android/ant-build/classes/de/appplant/cordova/plugin/localnotification/LocalNotification$2.class \
+/home/fherrero/workspace/test.workspace/abogados/platforms/android/ant-build/classes/de/appplant/cordova/plugin/localnotification/Restore.class \
+/home/fherrero/workspace/test.workspace/abogados/platforms/android/ant-build/classes/de/appplant/cordova/plugin/localnotification/ReceiverActivity.class \
+/home/fherrero/workspace/test.workspace/abogados/platforms/android/ant-build/classes/de/appplant/cordova/plugin/localnotification/LocalNotification$4.class \
+/home/fherrero/workspace/test.workspace/abogados/platforms/android/ant-build/classes/de/appplant/cordova/plugin/localnotification/Receiver.class \
 /home/fherrero/workspace/test.workspace/abogados/platforms/android/ant-build/dexedLibs/classes-9c0611f4d2e4d820ff3d86484eab44cd.jar \

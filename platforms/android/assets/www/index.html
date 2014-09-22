@@ -5,28 +5,30 @@
     <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no, width=device-width">
     <title></title>
 
-    <link href="lib/ionic/css/ionic.css" rel="stylesheet">
-    <link href="css/style.css" rel="stylesheet">
+    <!--<link href="lib/ionic/css/ionic.css" rel="stylesheet">-->
+    <!--<link href="css/style.css" rel="stylesheet">-->
 
     <!-- IF using Sass (run gulp sass first), then uncomment below and remove the CSS includes above
-    <link href="css/ionic.app.css" rel="stylesheet">
     -->
+    <link href="css/app.css" rel="stylesheet">
 
     <!-- ionic/angularjs js -->
     <script src="lib/ionic/js/ionic.bundle.js"></script>
 
+    <script src="lib/ngCordova/dist/ng-cordova.js"></script>
     <!-- cordova script (this will be a 404 during development) -->
     <script src="cordova.js"></script>
 
     <!-- libs -->
     <script src="lib/lodash/dist/lodash.min.js"></script>
     <script src="lib/restangular/dist/restangular.min.js"></script>
-    <script src="//cdnjs.cloudflare.com/ajax/libs/socket.io/0.9.16/socket.io.min.js"></script>
+    <script src="js/socket.io.min.js"></script>
 
     <script src="lib/sails.io.js/sails.io.js"></script>
     <script type="text/javascript">
-        io.sails.url = 'http://192.168.56.1:1337';
-        sock = io.connect();
+        ENDPOINT = "http://10.0.2.2:1337"
+        io.sails.url = ENDPOINT;
+        window.sock = io.connect();
     </script>
     <script src="lib/angular-socket-io/socket.js"></script>
 
@@ -37,12 +39,14 @@
 </head>
 
 <body ng-app="fitSOS" ng-controller="MainCtrl" class="platform-android platform-cordova platform-webview">
-<ion-nav-bar title="Búsqueda" class="bar-positive" animation="nav-title-slide-ios7">
-    <ion-nav-back-button class="button-dark"><i class="ion-arrow-left-c"></i> Back</ion-nav-back-button>
+
+<ion-nav-bar ng-if="showBar">
     <ion-nav-buttons side="right">
-        <button class="button button-dark" ng-click="goToMessages()">Boton ({{ message_count }}}</button>
+        hola
     </ion-nav-buttons>
 </ion-nav-bar>
-<ion-nav-view animation="slide-left-right"></ion-nav-view>
+<ion-nav-view animation="slide-left-right">
+
+</ion-nav-view>
 </body>
 </html>

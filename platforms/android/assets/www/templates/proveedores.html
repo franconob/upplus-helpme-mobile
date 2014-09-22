@@ -1,10 +1,20 @@
-<ion-view title="Proveedores ({{usuario.name}})">
-    <ion-content>
+<ion-view title="Proveedores">
+    <ion-nav-bar>
+        <ion-nav-buttons side="left">
+            <button menu-toggle="left" class="button button-icon icon ion-navicon"></button>
+        </ion-nav-buttons>
+    </ion-nav-bar>
+    <ion-content has-header="true">
         <ion-list>
-            <ion-item ng-repeat="user in users" ui-sref="chat({id: user.id})">
-                {{ user.name }}
+            <ion-item class="item item-avatar" ng-repeat="user in users" ui-sref="homepage.chat({id: user.userid})">
+                <img ng-src="{{user.juser.profile.avatar}}"/>
+
+                <h2>{{ user.juser.name }}</h2>
+
+                <p>Descripcion corta</p>
             </ion-item>
         </ion-list>
     </ion-content>
 </ion-view>
+
 

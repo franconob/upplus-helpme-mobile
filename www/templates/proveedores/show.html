@@ -1,10 +1,17 @@
-<ion-view>
+<ion-view title="{{ }}">
+    <ion-nav-bar>
+        <ion-nav-buttons side="left">
+            <button menu-toggle="left" class="button button-icon icon ion-navicon"></button>
+        </ion-nav-buttons>
+    </ion-nav-bar>
     <ion-content>
         <ion-scroll>
             <ion-list>
                 <ion-item ng-repeat="message in messages" class="item-avatar">
                     <img src="/img/user_default.png"/>
+
                     <p>{{ message.time }}</p>
+
                     <h2>{{ message.msg}}</h2>
                 </ion-item>
             </ion-list>

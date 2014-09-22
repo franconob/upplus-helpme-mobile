@@ -1,0 +1,8 @@
+{
+    "jscodehints.detectedExclusions": [
+        "/home/fherrero/workspace/test.workspace/abogados/www/lib/ngCordova/src/module.js",
+        "/home/fherrero/workspace/test.workspace/abogados/www/lib/ngCordova/src/plugins/statusbar.js",
+        "/home/fherrero/workspace/test.workspace/abogados/www/js/controllers.js",
+        "/home/fherrero/workspace/test.workspace/abogados/www/lib/ngCordova/src/plugins/ga.js"
+    ]
+}

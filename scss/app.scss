@@ -1,3 +1,6 @@
+//@import 'ionic.app';
+@import "../www/lib/ionic/scss/ionic";
+
 form i.icon.error {
   color: $assertive;
 }
@@ -22,3 +25,18 @@ form .has-success {
 form.ng-submitted input.ng-valid + i.icon.error {
   display: none;
 }
+
+.center {
+  text-align: center;
+}
+
+.item-border-bottom {
+  @include item-style($item-default-bg, $item-default-border, $item-default-text);
+  border-top: none;
+  border-left: none;
+  border-right: none;
+  border-bottom: 1px solid $item-default-border;
+
+}
+
+

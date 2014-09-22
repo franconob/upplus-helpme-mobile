@@ -1,5 +1,5 @@
-function SocketIO(io, $rootScope, SessionService) {
-    this.io = io;
+function SocketIO(socket, $rootScope, SessionService) {
+    this.socket = socket;
 
     var self = this;
     this.users = [];
@@ -7,12 +7,8 @@ function SocketIO(io, $rootScope, SessionService) {
     $rootScope.users = [];
     $rootScope.usuario = {};
 
-    this.io.socket.on('connect', function () {
-        self.io.socket.on('hello', function (user) {
-            SessionService.user = user;
-        });
-
-        self.io.socket.on('chatuser', function (message) {
+    this.socket.on('connect', function () {
+          self.socket.on('sessionuser', function (message) {
             switch (message.verb) {
                 case 'updated':
                 {
@@ -24,9 +20,7 @@ function SocketIO(io, $rootScope, SessionService) {
                         }
                     });
 
-                    console.log('debug', message.previous.name, SessionService.user.id);
                     if (message.previous.name == null && SessionService.user.id == message.id) {
-                        console.log('llega!!');
                         $rootScope.$broadcast('user.session.updated', message.data);
                     }
                     break;
@@ -46,7 +40,7 @@ function SocketIO(io, $rootScope, SessionService) {
 
                 case 'messaged':
                 {
-                    if(message.data.from.id !== SessionService.user.id) {
+                    if (message.data.from.id !== SessionService.user.id) {
                         $rootScope.$broadcast('notifications.messages.received');
                     }
                     $rootScope.$broadcast('user.messaged', message);
@@ -70,12 +64,37 @@ function SocketIO(io, $rootScope, SessionService) {
     }
 }).provider('socket', function socketProvider() {
 
-    this.setSocket = function (io) {
-        this.io = io;
+    this.setSocket = function (sock) {
+        this.io = sock;
     };
 
     this.$get = ["$rootScope", "SessionService", function ($rootScope, SessionService) {
-        return new SocketIO(io, $rootScope, SessionService);
+        return new SocketIO(this.io, $rootScope, SessionService);
     }];
 
+}).factory('TokenInterceptor', function ($q, $window) {
+    return {
+        request: function (config) {
+            config.headers = config.headers || {};
+            if ($window.sessionStorage.token) {
+                config.headers.Authorization = 'Bearer ' + $window.sessionStorage.token;
+            }
+            return config;
+        },
+
+        response: function (response) {
+            return response || $q.when(response);
+        }
+    };
+}).factory('LoadingService', function($ionicLoading) {
+    return {
+        show: function(template) {
+            $ionicLoading.show({
+                template: '<i class="icon ion-loading-c"></i> ' + template
+            });
+        },
+        hide: function() {
+            $ionicLoading.hide();
+        }
+    }
 });
