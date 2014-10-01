@@ -1,6 +1,6 @@
 var controllers;
 
-controllers = angular.module("fitSOS.controllers", []);
+controllers = angular.module("helpme.controllers", []);
 
 controllers.controller("LoginCtrl", ["$scope", "$state", "SessionService", "$ionicPopup", "LoadingService", function ($scope, $state, SessionService, $ionicPopup, LoadingService) {
     $scope.loginData = {};
@@ -29,6 +29,7 @@ controllers.controller("MainCtrl", function ($scope, $state) {
     $scope.messages = [];
     $scope.total_users = 0;
     $scope.incommingMessages = [];
+    $scope.users = [];
 
     $scope.goToMessages = function () {
         $state.transitionTo("messages");
@@ -80,7 +81,11 @@ controllers.controller("ProveedoresCtrl", [
                 titleText: "Acciones",
                 buttonClicked: function (index) {
                     if (1 == index) {
-                        $state.transitionTo('homepage.chat', {id: id})
+                        $state.transitionTo('homepage.chat', {id: id});
+                    }
+
+                    if (0 == index) {
+                        $state.transitionTo('homepage.profile', {id: id});
                     }
                 }
             })
@@ -90,6 +95,15 @@ controllers.controller("ProveedoresCtrl", [
 
 controllers.controller("ChatCtrl", ["$scope", "$rootScope", "$stateParams", "socket", "$cordovaLocalNotification", "$window", function ($scope, $rootScope, $stateParams, socket, $cordovaLocalNotification, $window) {
     var userid = $stateParams.id;
+
+    socket.socket.get('/sessionuser/' + userid, {
+        headers: {
+            Authorization: $window.sessionStorage.token
+        }
+    }, function (user) {
+        $scope.user = user;
+        console.log($scope.user);
+    });
 
     $scope.send = function (message) {
         socket.socket.post('/sessionuser/message/', {
@@ -136,6 +150,13 @@ controllers.controller("NotificationsCtrl", ["$scope", "$state", "$ionicPopover"
     $scope.openPopover = function ($event) {
         $scope.popover.show($event);
     };
+}]);
+
+controllers.controller("ProfileCtrl", ["$scope", "$stateParams", "Restangular", function ($scope, $stateParams, Restangular) {
+    Restangular.one('user', $stateParams.id).get().then(function (resp) {
+        $scope.user = resp.data;
+        console.log($scope.user);
+    })
 }]);
 
 controllers.controller("MessagesCtrl", ["$scope", "socket", function ($scope, socket) {

@@ -45,7 +45,7 @@ function SocketIO(socket, $rootScope) {
     });
 }
 
-angular.module('fitSOS.services', []).factory("SessionService", function (Restangular, $window, $rootScope, socket) {
+angular.module('helpme.services', []).factory("SessionService", function (Restangular, $window, $rootScope, socket) {
     return {
         authenticated: false,
         username: null,
@@ -88,7 +88,7 @@ angular.module('fitSOS.services', []).factory("SessionService", function (Restan
         request: function (config) {
             config.headers = config.headers || {};
             if ($window.sessionStorage.token) {
-                config.headers.Authorization = 'Bearer ' + $window.sessionStorage.token;
+                config.headers.Authorization = $window.sessionStorage.token;
             }
             return config;
         },

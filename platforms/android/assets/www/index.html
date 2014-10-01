@@ -22,7 +22,8 @@
     <!-- libs -->
     <script src="lib/lodash/dist/lodash.min.js"></script>
     <script src="lib/restangular/dist/restangular.min.js"></script>
-    <script src="js/socket.io.min.js"></script>
+    <script src="lib/socket.io-client/dist/socket.io.min.js"></script>
+    <script type="text/javascript" src="lib/igTruncate/dist/igTruncate.min.js"></script>
 
     <script src="lib/sails.io.js/sails.io.js"></script>
     <script type="text/javascript">
@@ -36,9 +37,11 @@
     <script src="js/app.js"></script>
     <script src="js/services.js"></script>
     <script src="js/controllers.js"></script>
+    <script src="js/directives.js"></script>
+    <script src="js/filters.js"></script>
 </head>
 
-<body ng-app="fitSOS" ng-controller="MainCtrl" class="platform-android platform-cordova platform-webview">
+<body ng-app="helpme" ng-controller="MainCtrl" class="platform-android platform-cordova platform-webview">
 
 <ion-nav-bar ng-if="showBar">
     <ion-nav-buttons side="right">
@@ -49,4 +52,21 @@
 
 </ion-nav-view>
 </body>
+
+<script type="text/ng-template" id="popover.html">
+    <ion-popover-view>
+        <ion-header-bar>
+            <h1 class="title">Mensajes sin leer ({{count}})</h1>
+        </ion-header-bar>
+        <ion-content>
+            <ion-list ng-repeat="msg in messages">
+                <ion-item class="item item-icon-left" ng-click="goToChat(msg)">
+                    <i class="icon ion-chatbox"></i>
+                     {{msg.data.msg|truncate:25}}
+                    <span class="item-note">{{ msg.data.from.name }}</span>
+                </ion-item>
+            </ion-list>
+        </ion-content>
+    </ion-popover-view>
+</script>
 </html>

@@ -31,16 +31,16 @@
         io.sails.url = ENDPOINT;
         window.sock = io.connect();
     </script>
-    <script src="lib/angular-socket-io/socket.js"></script>
 
     <!-- your app's js -->
     <script src="js/app.js"></script>
     <script src="js/services.js"></script>
     <script src="js/controllers.js"></script>
     <script src="js/directives.js"></script>
+    <script src="js/filters.js"></script>
 </head>
 
-<body ng-app="fitSOS" ng-controller="MainCtrl">
+<body ng-app="helpme" ng-controller="MainCtrl">
 
 <ion-nav-bar ng-if="showBar">
     <ion-nav-buttons side="right">

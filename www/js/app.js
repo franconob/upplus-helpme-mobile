@@ -1,4 +1,4 @@
-angular.module("fitSOS", ["ionic", "restangular", "fitSOS.controllers", "fitSOS.services", "helpme.directives", "ngCordova", "igTruncate"]).run(function ($ionicPlatform, $rootScope, SessionService, $state) {
+angular.module("helpme", ["ionic", "restangular", "helpme.controllers", "helpme.services", "helpme.directives", "helpme.filters", "ngCordova", "igTruncate"]).run(function ($ionicPlatform, $rootScope, SessionService, $state) {
     $ionicPlatform.ready(function () {
         if (window.cordova && window.cordova.plugins.Keyboard) {
             cordova.plugins.Keyboard.hideKeyboardAccessoryBar(true);
@@ -76,6 +76,14 @@ angular.module("fitSOS", ["ionic", "restangular", "fitSOS.controllers", "fitSOS.
             },
             data: {
                 requiresLogin: true
+            }
+        }).state("homepage.profile", {
+            url: '/profile/:id',
+            views: {
+                menuContent: {
+                    templateUrl: "templates/proveedores/profile.html",
+                    controller: "ProfileCtrl"
+                }
             }
         });
 

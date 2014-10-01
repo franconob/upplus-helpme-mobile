@@ -1,4 +1,4 @@
-angular.module("fitSOS", ["ionic", "restangular", "fitSOS.controllers", "fitSOS.services", "ngCordova"]).run(function ($ionicPlatform, $rootScope, SessionService, $state) {
+angular.module("helpme", ["ionic", "restangular", "helpme.controllers", "helpme.services", "helpme.directives", "helpme.filters", "ngCordova", "igTruncate"]).run(function ($ionicPlatform, $rootScope, SessionService, $state) {
     $ionicPlatform.ready(function () {
         if (window.cordova && window.cordova.plugins.Keyboard) {
             cordova.plugins.Keyboard.hideKeyboardAccessoryBar(true);
@@ -22,7 +22,7 @@ angular.module("fitSOS", ["ionic", "restangular", "fitSOS.controllers", "fitSOS.
     $stateProvider
         .state('root', {
             url: '/',
-            controller: function($state) {
+            controller: function ($state) {
                 $state.transitionTo('login')
             },
             data: {
@@ -45,7 +45,7 @@ angular.module("fitSOS", ["ionic", "restangular", "fitSOS.controllers", "fitSOS.
                 requiresLogin: true
             }
         }).state("homepage.proveedores", {
-            url: "/home/proveedores",
+            url: "/proveedores",
             views: {
                 'menuContent': {
                     templateUrl: "templates/proveedores.html",
@@ -55,8 +55,19 @@ angular.module("fitSOS", ["ionic", "restangular", "fitSOS.controllers", "fitSOS.
             data: {
                 requiresLogin: true
             }
+        }).state("homepage.messages", {
+            url: "/proveedores/messages",
+            views: {
+                menuContent: {
+                    templateUrl: "templates/proveedores/messages.html",
+                    controller: "MessagesCtrl"
+                }
+            },
+            data: {
+                requiresLogin: true
+            }
         }).state("homepage.chat", {
-            url: "/home/proveedores/chat/:id",
+            url: "/proveedores/chat/:id",
             views: {
                 menuContent: {
                     templateUrl: "templates/proveedores/show.html",
@@ -66,16 +77,13 @@ angular.module("fitSOS", ["ionic", "restangular", "fitSOS.controllers", "fitSOS.
             data: {
                 requiresLogin: true
             }
-        }).state("homepage.messages", {
-            url: "/home/proveedores/messages",
+        }).state("homepage.profile", {
+            url: '/profile/:id',
             views: {
                 menuContent: {
-                    templateUrl: "templates/proveedores/messages.html",
-                    controller: "MessagesCtrl"
+                    templateUrl: "templates/proveedores/profile.html",
+                    controller: "ProfileCtrl"
                 }
-            },
-            data: {
-                requiresLogin: true
             }
         });
 

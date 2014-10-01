@@ -1,0 +1,52 @@
+<ion-view title="{{user.name}}">
+    <ion-nav-bar>
+        <ion-nav-buttons side="left">
+            <button menu-toggle="left" class="button button-icon icon ion-navicon"></button>
+        </ion-nav-buttons>
+        <ion-nav-buttons side="right">
+            <helpme-notifications messages="incommingMessages"></helpme-notifications>
+        </ion-nav-buttons>
+    </ion-nav-bar>
+    <ion-content>
+        <div class="list card">
+
+            <div class="item item-avatar">
+                <img ng-src="{{user.profile.avatar}}">
+
+                <h2>{{user.name}}</h2>
+
+                <p>{{user.extras.areaPractica|default}}</p>
+            </div>
+
+            <div class="item item-body">
+                <!--<img class="full-image" src="delorean.jpg">-->
+
+                <p>
+                    {{user.extras.acercaDeMi}}
+                </p>
+
+                <p>
+                    <span class="">País: {{user.extras.country|default}}</span>
+                    <span class="">Población: {{user.extras.state|default}}</span>
+                    <span class="">Ciudad: {{user.extras.city|default}}</span>
+                </p>
+            </div>
+
+            <div class="item tabs tabs-secondary tabs-icon-left">
+                <a class="tab-item" ui-sref="homepage.chat({id: user.id})">
+                    <i class="icon ion-chatbox"></i>
+                    Chat
+                </a>
+                <a class="tab-item" href="#">
+                    <i class="icon ion-chatbox"></i>
+                    Comment
+                </a>
+                <a class="tab-item" href="#">
+                    <i class="icon ion-share"></i>
+                    Share
+                </a>
+            </div>
+        </div>
+    </ion-content>
+</ion-view>
+
