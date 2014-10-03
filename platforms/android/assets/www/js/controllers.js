@@ -29,6 +29,7 @@ controllers.controller("MainCtrl", function ($scope, $state) {
     $scope.messages = [];
     $scope.total_users = 0;
     $scope.incommingMessages = [];
+    $scope.users = [];
 
     $scope.goToMessages = function () {
         $state.transitionTo("messages");
@@ -83,7 +84,7 @@ controllers.controller("ProveedoresCtrl", [
                         $state.transitionTo('homepage.chat', {id: id});
                     }
 
-                    if(0 == index) {
+                    if (0 == index) {
                         $state.transitionTo('homepage.profile', {id: id});
                     }
                 }
@@ -92,24 +93,45 @@ controllers.controller("ProveedoresCtrl", [
     }
 ]);
 
-controllers.controller("ChatCtrl", ["$scope", "$rootScope", "$stateParams", "socket", "$cordovaLocalNotification", "$window", function ($scope, $rootScope, $stateParams, socket, $cordovaLocalNotification, $window) {
+controllers.controller("ChatCtrl", ["$scope", "$rootScope", "$stateParams", "socket", "$cordovaLocalNotification", "$window", "SessionService", "$ionicScrollDelegate", function ($scope, $rootScope, $stateParams, socket, $cordovaLocalNotification, $window, SessionService, $ionicScrollDelegate) {
     var userid = $stateParams.id;
 
+    socket.socket.get('/conversations/' + SessionService.user.id + '/' + userid, {
+        headers: {
+            Authorization: $window.sessionStorage.token
+        }
+    }, function (data) {
+        $scope.$apply(function () {
+            $ionicScrollDelegate.$getByHandle('chat').scrollBottom();
+            $scope.messages = data;
+        })
+    });
+
+    socket.socket.get('/sessionuser/' + userid, {
+        headers: {
+            Authorization: $window.sessionStorage.token
+        }
+    }, function (user) {
+        $scope.user = user;
+    });
+
     $scope.send = function (message) {
+        $scope.message = "";
         socket.socket.post('/sessionuser/message/', {
             to: userid,
-            msg: message,
+            message: message,
             headers: {
                 Authorization: $window.sessionStorage.token
             }
+        }, function (data) {
+            $scope.$apply(function () {
+                $scope.messages.push(data);
+            })
         });
-        $scope.messages.push({msg: message, time: new Date().toLocaleString()});
-        $scope.message = "";
     };
 
     $scope.$on('user.messaged', function (evt, message) {
         $scope.$apply(function () {
-            message.data.time = new Date().toLocaleString();
             $scope.messages.push(message.data);
 
             $cordovaLocalNotification.add({
@@ -142,8 +164,8 @@ controllers.controller("NotificationsCtrl", ["$scope", "$state", "$ionicPopover"
     };
 }]);
 
-controllers.controller("ProfileCtrl", ["$scope", "$stateParams", "Restangular", function($scope, $stateParams, Restangular) {
-    Restangular.one('user', $stateParams.id).get().then(function(resp) {
+controllers.controller("ProfileCtrl", ["$scope", "$stateParams", "Restangular", function ($scope, $stateParams, Restangular) {
+    Restangular.one('user', $stateParams.id).get().then(function (resp) {
         $scope.user = resp.data;
     })
 }]);

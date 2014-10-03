@@ -9,12 +9,17 @@ angular.module('helpme.directives', [])
                 messages: '='
             },
             replace: true,
-            template: '<button class="button button-clear button-stable" ng-click="open($event)"><i class="icon ion-chatbubbles">{{ count }}</i></button>',
+            template: '<button class="button button-clear button-stable" ng-click="open($event)"><i ng-class="{\'icon ion-chatbubbles\': hasMessages(), \'icon ion-chatbubble\': !hasMessages()}">{{ count }}</i></button>',
             link: function (scope) {
 
                 scope.count = 0;
 
+                scope.hasMessages = function() {
+                    return scope.count > 0;
+                };
+
                 scope.$on('user.messaged', function() {
+                    console.log(scope.messages);
                     scope.$apply(function() {
                         scope.count++;
                     })
@@ -32,7 +37,7 @@ angular.module('helpme.directives', [])
 
                 scope.goToChat = function (message) {
                     _.remove(scope.messages, function (msg) {
-                        return msg.id == message.id;
+                        return msg.data.id == message.data.id;
                     });
                     scope.popover.hide();
                     $state.transitionTo('homepage.chat', {id: message.data.from.userid});

@@ -61,7 +61,7 @@
             <ion-list ng-repeat="msg in messages">
                 <ion-item class="item item-icon-left" ng-click="goToChat(msg)">
                     <i class="icon ion-chatbox"></i>
-                     {{msg.data.msg|truncate:25}}
+                     {{msg.data.message|truncate:25}}
                     <span class="item-note">{{ msg.data.from.name }}</span>
                 </ion-item>
             </ion-list>

@@ -4,21 +4,20 @@
             <button menu-toggle="left" class="button button-icon icon ion-navicon"></button>
         </ion-nav-buttons>
     </ion-nav-bar>
-    <ion-content>
-        <ion-scroll>
-            <ion-list>
-                <ion-item ng-repeat="message in messages" class="item-avatar">
-                    <img ng-src="{{message.from.profile.avatar}}" />
+    <ion-content start-y="100" delegate-handle="chat">
+        <ion-list>
+            <ion-item ng-repeat="message in messages" class="item-avatar">
+                <img ng-src="{{message.from.profile.avatar}}"/>
 
-                    <p>{{ message.createdAt}}</p>
+                <p>{{ message.createdAt|date: 'medium'}}</p>
 
-                    <h2>{{ message.message}}</h2>
-                </ion-item>
-            </ion-list>
-        </ion-scroll>
+                <h2>{{ message.message}}</h2>
+            </ion-item>
+        </ion-list>
+
     </ion-content>
 
-    <div class="bar bar-footer item-input-inset">
+    <ion-footer-bar class="item-input-inset">
         <label class="item-input-wrapper">
             <form ng-submit="send(message)">
                 <input type="text" ng-model="message" placeholder="Mensaje">
@@ -27,6 +26,6 @@
         <button class="button button-small">
             Enviar
         </button>
-    </div>
+    </ion-footer-bar>
 </ion-view>
 

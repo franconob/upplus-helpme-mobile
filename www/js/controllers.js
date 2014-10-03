@@ -46,7 +46,6 @@ controllers.controller("HomepageCtrl", function ($scope) {
 
 controllers.controller("ProveedoresCtrl", [
     "$scope", "socket", "$window", "$ionicActionSheet", "$state", function ($scope, socket, $window, $ionicActionSheet, $state) {
-        console.log($scope.users);
         $scope.$on('user.added', function (evt, args) {
             $scope.$apply(function () {
                 $scope.users.push(args);
@@ -94,7 +93,7 @@ controllers.controller("ProveedoresCtrl", [
     }
 ]);
 
-controllers.controller("ChatCtrl", ["$scope", "$rootScope", "$stateParams", "socket", "$cordovaLocalNotification", "$window", "SessionService", function ($scope, $rootScope, $stateParams, socket, $cordovaLocalNotification, $window, SessionService) {
+controllers.controller("ChatCtrl", ["$scope", "$rootScope", "$stateParams", "socket", "$cordovaLocalNotification", "$window", "SessionService", "$ionicScrollDelegate", function ($scope, $rootScope, $stateParams, socket, $cordovaLocalNotification, $window, SessionService, $ionicScrollDelegate) {
     var userid = $stateParams.id;
 
     socket.socket.get('/conversations/' + SessionService.user.id + '/' + userid, {
@@ -103,6 +102,7 @@ controllers.controller("ChatCtrl", ["$scope", "$rootScope", "$stateParams", "soc
         }
     }, function (data) {
         $scope.$apply(function () {
+            $ionicScrollDelegate.$getByHandle('chat').scrollBottom();
             $scope.messages = data;
         })
     });
@@ -126,24 +126,23 @@ controllers.controller("ChatCtrl", ["$scope", "$rootScope", "$stateParams", "soc
         }, function (data) {
             $scope.$apply(function () {
                 $scope.messages.push(data);
+                $ionicScrollDelegate.$getByHandle('chat').scrollBottom();
             })
         });
     };
 
     $scope.$on('user.messaged', function (evt, message) {
         $scope.$apply(function () {
-            console.log('debug', message.data, $rootScope.users);
             $scope.messages.push(message.data);
+            $ionicScrollDelegate.$getByHandle('chat').scrollBottom();
 
-            /*
-             $cordovaLocalNotification.add({
-             id: 'com.help.upplus4.notification.message',
-             title: 'Mensaje recibido',
-             message: message.data.from.name + ': ' + message.data.msg
-             }).then(function (arg) {
-             console.log(arg);
-             });
-             */
+            $cordovaLocalNotification.add({
+                id: 'com.help.upplus4.notification.message',
+                title: 'Mensaje recibido',
+                message: message.data.from.name + ': ' + message.data.message
+            }).then(function (arg) {
+                console.log(arg);
+            });
         })
     });
 
@@ -170,7 +169,6 @@ controllers.controller("NotificationsCtrl", ["$scope", "$state", "$ionicPopover"
 controllers.controller("ProfileCtrl", ["$scope", "$stateParams", "Restangular", function ($scope, $stateParams, Restangular) {
     Restangular.one('user', $stateParams.id).get().then(function (resp) {
         $scope.user = resp.data;
-        console.log($scope.user);
     })
 }]);
 
