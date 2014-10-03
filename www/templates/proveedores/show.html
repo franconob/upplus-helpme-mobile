@@ -8,11 +8,11 @@
         <ion-scroll>
             <ion-list>
                 <ion-item ng-repeat="message in messages" class="item-avatar">
-                    <img src="/img/user_default.png"/>
+                    <img ng-src="{{message.from.profile.avatar}}" />
 
-                    <p>{{ message.time }}</p>
+                    <p>{{ message.createdAt}}</p>
 
-                    <h2>{{ message.msg}}</h2>
+                    <h2>{{ message.message}}</h2>
                 </ion-item>
             </ion-list>
         </ion-scroll>
@@ -24,7 +24,7 @@
                 <input type="text" ng-model="message" placeholder="Mensaje">
             </form>
         </label>
-        <button class="button button-small" ng-click="send(message)">
+        <button class="button button-small">
             Enviar
         </button>
     </div>

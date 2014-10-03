@@ -46,6 +46,7 @@ controllers.controller("HomepageCtrl", function ($scope) {
 
 controllers.controller("ProveedoresCtrl", [
     "$scope", "socket", "$window", "$ionicActionSheet", "$state", function ($scope, socket, $window, $ionicActionSheet, $state) {
+        console.log($scope.users);
         $scope.$on('user.added', function (evt, args) {
             $scope.$apply(function () {
                 $scope.users.push(args);
@@ -93,8 +94,18 @@ controllers.controller("ProveedoresCtrl", [
     }
 ]);
 
-controllers.controller("ChatCtrl", ["$scope", "$rootScope", "$stateParams", "socket", "$cordovaLocalNotification", "$window", function ($scope, $rootScope, $stateParams, socket, $cordovaLocalNotification, $window) {
+controllers.controller("ChatCtrl", ["$scope", "$rootScope", "$stateParams", "socket", "$cordovaLocalNotification", "$window", "SessionService", function ($scope, $rootScope, $stateParams, socket, $cordovaLocalNotification, $window, SessionService) {
     var userid = $stateParams.id;
+
+    socket.socket.get('/conversations/' + SessionService.user.id + '/' + userid, {
+        headers: {
+            Authorization: $window.sessionStorage.token
+        }
+    }, function (data) {
+        $scope.$apply(function () {
+            $scope.messages = data;
+        })
+    });
 
     socket.socket.get('/sessionuser/' + userid, {
         headers: {
@@ -102,33 +113,37 @@ controllers.controller("ChatCtrl", ["$scope", "$rootScope", "$stateParams", "soc
         }
     }, function (user) {
         $scope.user = user;
-        console.log($scope.user);
     });
 
     $scope.send = function (message) {
+        $scope.message = "";
         socket.socket.post('/sessionuser/message/', {
             to: userid,
-            msg: message,
+            message: message,
             headers: {
                 Authorization: $window.sessionStorage.token
             }
+        }, function (data) {
+            $scope.$apply(function () {
+                $scope.messages.push(data);
+            })
         });
-        $scope.messages.push({msg: message, time: new Date().toLocaleString()});
-        $scope.message = "";
     };
 
     $scope.$on('user.messaged', function (evt, message) {
         $scope.$apply(function () {
-            message.data.time = new Date().toLocaleString();
+            console.log('debug', message.data, $rootScope.users);
             $scope.messages.push(message.data);
 
-            $cordovaLocalNotification.add({
-                id: 'com.help.upplus4.notification.message',
-                title: 'Mensaje recibido',
-                message: message.data.from.name + ': ' + message.data.msg
-            }).then(function (arg) {
-                console.log(arg);
-            });
+            /*
+             $cordovaLocalNotification.add({
+             id: 'com.help.upplus4.notification.message',
+             title: 'Mensaje recibido',
+             message: message.data.from.name + ': ' + message.data.msg
+             }).then(function (arg) {
+             console.log(arg);
+             });
+             */
         })
     });
 
