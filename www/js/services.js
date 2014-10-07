@@ -54,21 +54,21 @@ angular.module('helpme.services', []).factory("SessionService", function (Restan
         login: function (credentials, callback) {
             var self = this;
             Restangular.all('user').all('login').post(credentials).then(function (resp) {
-                    $window.sessionStorage.token = resp.data.token;
-                    self.authenticated = true;
-                    self.user = resp.data;
-                    var user = {
-                        name: self.user.username,
-                        userid: self.user.id
-                    };
-                    var headers = {
-                        Authorization: $window.sessionStorage.token
-                    };
-                    socket.socket.post('/sessionuser/create', {user: user, headers: headers}, function (data) {
-                        $rootScope.user = data;
-                    });
+                $window.sessionStorage.token = resp.data.token;
+                self.authenticated = true;
+                self.user = resp.data;
+                var user = {
+                    name: self.user.username,
+                    userid: self.user.id
+                };
+                var headers = {
+                    Authorization: $window.sessionStorage.token
+                };
+                socket.socket.post('/sessionuser/create', {user: user, headers: headers}, function (data) {
+                    $rootScope.user = data;
+                });
                 return callback(resp);
-            }, function(resp) {
+            }, function (resp) {
                 return callback(resp);
             });
         }

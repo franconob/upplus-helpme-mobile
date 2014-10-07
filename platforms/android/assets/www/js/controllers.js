@@ -126,6 +126,7 @@ controllers.controller("ChatCtrl", ["$scope", "$rootScope", "$stateParams", "soc
         }, function (data) {
             $scope.$apply(function () {
                 $scope.messages.push(data);
+                $ionicScrollDelegate.$getByHandle('chat').scrollBottom();
             })
         });
     };
@@ -133,11 +134,12 @@ controllers.controller("ChatCtrl", ["$scope", "$rootScope", "$stateParams", "soc
     $scope.$on('user.messaged', function (evt, message) {
         $scope.$apply(function () {
             $scope.messages.push(message.data);
+            $ionicScrollDelegate.$getByHandle('chat').scrollBottom();
 
             $cordovaLocalNotification.add({
                 id: 'com.help.upplus4.notification.message',
                 title: 'Mensaje recibido',
-                message: message.data.from.name + ': ' + message.data.msg
+                message: message.data.from.name + ': ' + message.data.message
             }).then(function (arg) {
                 console.log(arg);
             });

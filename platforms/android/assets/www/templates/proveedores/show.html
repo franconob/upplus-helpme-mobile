@@ -9,7 +9,7 @@
             <ion-item ng-repeat="message in messages" class="item-avatar">
                 <img ng-src="{{message.from.profile.avatar}}"/>
 
-                <p>{{ message.createdAt}}</p>
+                <p>{{ message.createdAt|date: 'medium'}}</p>
 
                 <h2>{{ message.message}}</h2>
             </ion-item>
