@@ -375,6 +375,7 @@
      */
 
     Socket.prototype.get = function(url, data, cb) {
+        console.log('HACIENDO GET!');
 
       // `data` is optional
       if (typeof data === 'function') {
@@ -548,6 +549,7 @@
       // instead of sending it.
       // (so it can be replayed when the socket comes online.)
       if (!_isConnected(this)) {
+          console.log('no esta conectado');
         // If no queue array exists for this socket yet, create it.
         this.requestQueue = this.requestQueue || [];
         this.requestQueue.push(request);

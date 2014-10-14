@@ -22,7 +22,7 @@ controllers.controller("LoginCtrl", ["$scope", "$state", "SessionService", "$ion
     }
 }]);
 
-controllers.controller("MainCtrl", function ($scope, $state) {
+controllers.controller("MainCtrl", function ($scope, $state, $cordovaLocalNotification, SessionService) {
     $scope.messages = [];
     $scope.messageCount = 0;
     $scope.user = {};
@@ -36,9 +36,30 @@ controllers.controller("MainCtrl", function ($scope, $state) {
     };
 
 
+    $scope.$on('notification.local.click', function (evt, data) {
+        if (data.id == 'com.help.upplus4.notification.message') {
+            $scope.apply(function () {
+                $state.transitionTo('homepage.chat', {id: data.json.from})
+            })
+        }
+    });
+
     $scope.$on('user.messaged', function (evt, message) {
+
+        $cordovaLocalNotification.add({
+            id: 'com.help.upplus4.notification.message',
+            title: 'Mensaje recibido',
+            message: message.data.from.name + ': ' + message.data.message,
+            json: {from: message.data.from.userid}
+        }).then(function (arg) {
+            console.log(arg);
+        });
         $scope.incommingMessages.push(message);
     });
+
+    $scope.goToProfile = function() {
+        $state.transitionTo('homepage.profile', {id: SessionService.user.id});
+    }
 });
 
 controllers.controller("HomepageCtrl", function ($scope) {
@@ -62,7 +83,7 @@ controllers.controller("ProveedoresCtrl", [
             });
         });
 
-        socket.socket.get('/sessionuser/list', {
+        socket.emit('get', '/sessionuser/list', {
             headers: {
                 Authorization: $window.sessionStorage.token
             }
@@ -131,19 +152,24 @@ controllers.controller("ChatCtrl", ["$scope", "$rootScope", "$stateParams", "soc
         });
     };
 
+    /** mover este codigo a MainController **/
     $scope.$on('user.messaged', function (evt, message) {
-        $scope.$apply(function () {
-            $scope.messages.push(message.data);
-            $ionicScrollDelegate.$getByHandle('chat').scrollBottom();
+        if (message.data.from.userid == userid) {
+            $scope.$apply(function () {
+                $scope.messages.push(message.data);
+                $ionicScrollDelegate.$getByHandle('chat').scrollBottom();
+            })
 
+        } else {
             $cordovaLocalNotification.add({
                 id: 'com.help.upplus4.notification.message',
                 title: 'Mensaje recibido',
-                message: message.data.from.name + ': ' + message.data.message
+                message: message.data.from.name + ': ' + message.data.message,
+                json: {to: message.data.from.userid}
             }).then(function (arg) {
                 console.log(arg);
             });
-        })
+        }
     });
 
 
@@ -166,10 +192,22 @@ controllers.controller("NotificationsCtrl", ["$scope", "$state", "$ionicPopover"
     };
 }]);
 
-controllers.controller("ProfileCtrl", ["$scope", "$stateParams", "Restangular", function ($scope, $stateParams, Restangular) {
+controllers.controller("ProfileCtrl", ["$scope", "$stateParams", "Restangular", "SessionService", function ($scope, $stateParams, Restangular, SessionService) {
     Restangular.one('user', $stateParams.id).get().then(function (resp) {
         $scope.user = resp.data;
-    })
+    });
+
+    $scope.getInclude = function() {
+        if(parseInt($stateParams.id) !== SessionService.user.id) {
+            return "templates/proveedores/profile/_profile_footer.html";
+        } else {
+            return "templates/proveedores/profile/_profile_footer_mine.html";
+        }
+    };
+
+    $scope.edit = function() {
+        $scope.transitionTo('homepage.perfil.edit');
+    }
 }]);
 
 controllers.controller("MessagesCtrl", ["$scope", "socket", function ($scope, socket) {

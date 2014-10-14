@@ -7,7 +7,15 @@ angular.module("helpme", ["ionic", "restangular", "helpme.controllers", "helpme.
             StatusBar.styleDefault();
         }
 
+
+        window.plugin.notification.local.onclick = function (id, state, json) {
+            alert(JSON.parse(json).from);
+            $rootScope.$broadcast('notification.local.click', {id: id, state: state, json: JSON.parse(json)});
+            //window.location.href = '/#/home/proveedores/chat/' + JSON.parse(json).from;
+        };
+
     });
+
 
     $rootScope.$on('$stateChangeStart', function (event, toState, toParams) {
         if (toState.data.requiresLogin && !SessionService.authenticated) {
@@ -18,7 +26,7 @@ angular.module("helpme", ["ionic", "restangular", "helpme.controllers", "helpme.
 }).config(function ($stateProvider, $urlRouterProvider, RestangularProvider, socketProvider, $httpProvider) {
     RestangularProvider.setBaseUrl(ENDPOINT);
     RestangularProvider.setFullResponse(true);
-    socketProvider.setSocket(sock);
+    socketProvider.setIo(io);
     $stateProvider
         .state('root', {
             url: '/',
@@ -81,7 +89,7 @@ angular.module("helpme", ["ionic", "restangular", "helpme.controllers", "helpme.
             url: '/profile/:id',
             views: {
                 menuContent: {
-                    templateUrl: "templates/proveedores/profile.html",
+                    templateUrl: "templates/proveedores/profile/profile.html",
                     controller: "ProfileCtrl"
                 }
             }
@@ -94,4 +102,11 @@ angular.module("helpme", ["ionic", "restangular", "helpme.controllers", "helpme.
 
 ionic.Platform.ready(function () {
 
+    window.plugin.notification.local.onclick = function (id, state, json) {
+        if (id == 'com.help.upplus4.notification.message') {
+            $scope.apply(function () {
+                $state.transitionTo('homepage.chat', {id: json.from})
+            })
+        }
+    };
 });

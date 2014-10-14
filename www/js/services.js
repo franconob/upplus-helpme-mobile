@@ -1,14 +1,50 @@
-function SocketIO(socket, $rootScope) {
-    this.socket = socket;
+function SocketIO(io, $rootScope, SessionService) {
+    this.io = io;
+    this.socket = null;
 
-    var self = this;
     this.users = [];
+    this.pendingRequests = [];
 
     $rootScope.users = [];
     $rootScope.usuario = {};
 
-    this.socket.on('connect', function () {
+    this.emit = function (method, path, payload, cb) {
+        var self = this;
+        // `cb` is optional
+        if (typeof cb === 'string') {
+            method = cb;
+            cb = null;
+        }
+
+        // `data` is optional
+        if (typeof payload === 'function') {
+            cb = payload;
+            payload = {};
+        }
+        if (this.socket == null) {
+            this.socket = this.io.connect(ENDPOINT, {
+                query: 'token=' + SessionService.token
+            });
+            this.socket.on('connect', function () {
+                self.bindEvents();
+                self.socket[method](path, payload, function (response) {
+                    return cb(response);
+                });
+            })
+        } else {
+            this.socket[method](path, payload, function (response) {
+                return cb(response);
+            });
+        }
+
+
+    };
+
+    this.bindEvents = function () {
+        var self = this;
+        //this.socket.on('connect', function () {
         self.socket.on('sessionuser', function (message) {
+            console.log('evento!', message);
             switch (message.verb) {
                 case 'updated':
                 {
@@ -42,31 +78,35 @@ function SocketIO(socket, $rootScope) {
                 }
             }
         });
-    });
+        //});
+    }
 }
 
-angular.module('helpme.services', []).factory("SessionService", function (Restangular, $window, $rootScope, socket) {
+angular.module('helpme.services', []).factory("SessionService", function (Restangular, $window, $rootScope) {
     return {
         authenticated: false,
         username: null,
         id: null,
         user: {},
+        token: null,
         login: function (credentials, callback) {
             var self = this;
             Restangular.all('user').all('login').post(credentials).then(function (resp) {
-                $window.sessionStorage.token = resp.data.token;
+                $window.sessionStorage.token = self.token = resp.data.token;
                 self.authenticated = true;
                 self.user = resp.data;
-                var user = {
-                    name: self.user.username,
-                    userid: self.user.id
-                };
-                var headers = {
-                    Authorization: $window.sessionStorage.token
-                };
-                socket.socket.post('/sessionuser/create', {user: user, headers: headers}, function (data) {
-                    $rootScope.user = data;
-                });
+                /*
+                 var user = {
+                 name: self.user.username,
+                 userid: self.user.id
+                 };
+                 var headers = {
+                 Authorization: $window.sessionStorage.token
+                 };
+                 socket.emit('post', '/sessionuser/create', {user: user, headers: headers}, function (data) {
+                 $rootScope.user = data;
+                 });
+                 **/
                 return callback(resp);
             }, function (resp) {
                 return callback(resp);
@@ -75,12 +115,12 @@ angular.module('helpme.services', []).factory("SessionService", function (Restan
     }
 }).provider('socket', function socketProvider() {
 
-    this.setSocket = function (sock) {
-        this.io = sock;
+    this.setIo = function (io) {
+        this.io = io;
     };
 
-    this.$get = ["$rootScope", function ($rootScope) {
-        return new SocketIO(this.io, $rootScope);
+    this.$get = ["$rootScope", 'SessionService', function ($rootScope, SessionService) {
+        return new SocketIO(this.io, $rootScope, SessionService);
     }];
 
 }).factory('TokenInterceptor', function ($q, $window) {

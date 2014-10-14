@@ -28,8 +28,9 @@
     <script src="lib/sails.io.js/sails.io.js"></script>
     <script type="text/javascript">
         ENDPOINT = "http://helpme.upplus4.com:1337"
+        io.sails.autoConnect = false;
         io.sails.url = ENDPOINT;
-        window.sock = io.connect();
+        //window.sock = io;
     </script>
 
     <!-- your app's js -->
