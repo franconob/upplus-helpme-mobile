@@ -4,7 +4,7 @@
         <ion-nav-view name="menuContent" animation="slide-left-right"></ion-nav-view>
     </ion-side-menu-content>
 
-    <ion-side-menu side="left" width="200">
+    <ion-side-menu side="left" width="250">
         <header class="bar bar-header bar-stable">
             <h1 class="title">Left</h1>
         </header>
@@ -13,9 +13,10 @@
                 <ion-item nav-clear menu-close ui-sref="homepage.proveedores" ui-sref-active="active">
                     Proveedores
                 </ion-item>
-                <ion-item nav-clear menu-close ui-sref="homepage.profile">
+                <ion-item nav-clear menu-close ng-click="goToProfile()">
                     Mi perfil
                 </ion-item>
+                <ion-toggle ng-model="useGPS.status" toggle-class="toggle-calm">GPS</ion-toggle>
             </ion-list>
         </ion-content>
     </ion-side-menu>

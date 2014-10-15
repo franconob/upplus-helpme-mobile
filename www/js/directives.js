@@ -14,13 +14,13 @@ angular.module('helpme.directives', [])
 
                 scope.count = 0;
 
-                scope.hasMessages = function() {
+                scope.hasMessages = function () {
                     return scope.count > 0;
                 };
 
-                scope.$on('user.messaged', function() {
+                scope.$on('user.messaged', function () {
                     console.log(scope.messages);
-                    scope.$apply(function() {
+                    scope.$apply(function () {
                         scope.count++;
                     })
                 });
@@ -41,6 +41,47 @@ angular.module('helpme.directives', [])
                     });
                     scope.popover.hide();
                     $state.transitionTo('homepage.chat', {id: message.data.from.userid});
+                }
+            }
+        }
+    }]).directive('helpmeShare', ["$ionicPopover", "$cordovaCamera", function ($ionicPopover, $cordovaCamera) {
+        return {
+            restrict: 'A',
+            scope: {
+                sendPicture: '&'
+            },
+            template: '<button class="button button-icon icon ion-share" ng-click="openPopover($event)"></button>',
+            replace: true,
+            link: function linkShare(scope, attrs, elm) {
+
+                var cameraOptions = {
+                    quality: 75,
+                    destinationType: Camera.DestinationType.DATA_URL,
+                    sourceType: Camera.PictureSourceType.CAMERA,
+                    allowEdit: false,
+                    encodingType: Camera.EncodingType.JPEG,
+                    //targetWidth: 100,
+                    //targetHeight: 100,
+                    //popoverOptions: CameraPopoverOptions,
+                    saveToPhotoAlbum: false
+                };
+
+                $ionicPopover.fromTemplateUrl('templates/proveedores/shareMenu.html', {
+                    scope: scope
+                }).then(function (popover) {
+                    scope.popover = popover;
+                });
+
+                scope.openPopover = function ($event) {
+                    scope.popover.show($event);
+                };
+
+                scope.openCamera = function () {
+
+                    $cordovaCamera.getPicture(cameraOptions).then(function (imageData) {
+                        scope.popover.hide();
+                        scope.sendPicture({imageData: imageData});
+                    });
                 }
             }
         }

@@ -2,9 +2,17 @@ var controllers;
 
 controllers = angular.module("helpme.controllers", []);
 
-controllers.controller("LoginCtrl", ["$scope", "$state", "SessionService", "$ionicPopup", "LoadingService", function ($scope, $state, SessionService, $ionicPopup, LoadingService) {
+controllers.controller("LoginCtrl", ["$scope", "$state", "SessionService", "$ionicPopup", "LoadingService", "$cordovaSms", function ($scope, $state, SessionService, $ionicPopup, LoadingService, $cordovaSms) {
     $scope.loginData = {};
     $scope.showBar = false;
+
+    $scope.sendSms = function () {
+        $cordovaSms.send('+543416969784', 'Hola Zurdo, soy el kui', '').then(function (res) {
+            alert('Enviado correctamente: ' + res);
+        }, function (err) {
+            alert('Error enviando: ' + err);
+        });
+    }
 
     return $scope.login = function (credentials) {
         LoadingService.show('Comprobando credenciales...');
@@ -20,9 +28,11 @@ controllers.controller("LoginCtrl", ["$scope", "$state", "SessionService", "$ion
             }
         });
     }
+
+
 }]);
 
-controllers.controller("MainCtrl", function ($scope, $state, $cordovaLocalNotification, SessionService) {
+controllers.controller("MainCtrl", function ($scope, $state, $cordovaLocalNotification, SessionService, $cordovaBackgroundGeolocation) {
     $scope.messages = [];
     $scope.messageCount = 0;
     $scope.user = {};
@@ -30,6 +40,17 @@ controllers.controller("MainCtrl", function ($scope, $state, $cordovaLocalNotifi
     $scope.total_users = 0;
     $scope.incommingMessages = [];
     $scope.users = [];
+    $scope.useGPS = {
+        status: false
+    };
+    var GPSOptions = {
+        notificationTitle: 'GPS Helpme',
+        notificationText: 'GPS Activado',
+        timeout: 100,
+        enableHighAccuracy: true,
+        debug: true
+
+    };
 
     $scope.goToMessages = function () {
         $state.transitionTo("messages");
@@ -57,9 +78,17 @@ controllers.controller("MainCtrl", function ($scope, $state, $cordovaLocalNotifi
         $scope.incommingMessages.push(message);
     });
 
-    $scope.goToProfile = function() {
+    $scope.goToProfile = function () {
         $state.transitionTo('homepage.profile', {id: SessionService.user.id});
-    }
+    };
+
+    $scope.$watch('useGPS.status', function (oldVal, newVal) {
+        if (newVal) {
+            console.log('activado GPS');
+        } else {
+            //$cordovaBackgroundGeolocation.stop();
+        }
+    });
 });
 
 controllers.controller("HomepageCtrl", function ($scope) {
@@ -114,7 +143,7 @@ controllers.controller("ProveedoresCtrl", [
     }
 ]);
 
-controllers.controller("ChatCtrl", ["$scope", "$rootScope", "$stateParams", "socket", "$cordovaLocalNotification", "$window", "SessionService", "$ionicScrollDelegate", function ($scope, $rootScope, $stateParams, socket, $cordovaLocalNotification, $window, SessionService, $ionicScrollDelegate) {
+controllers.controller("ChatCtrl", ["$scope", "$rootScope", "$stateParams", "socket", "$cordovaLocalNotification", "$window", "SessionService", "$ionicScrollDelegate", "$ionicModal", function ($scope, $rootScope, $stateParams, socket, $cordovaLocalNotification, $window, SessionService, $ionicScrollDelegate, $ionicModal) {
     var userid = $stateParams.id;
 
     socket.socket.get('/conversations/' + SessionService.user.id + '/' + userid, {
@@ -136,11 +165,12 @@ controllers.controller("ChatCtrl", ["$scope", "$rootScope", "$stateParams", "soc
         $scope.user = user;
     });
 
-    $scope.send = function (message) {
+    $scope.send = function (message, type) {
         $scope.message = "";
         socket.socket.post('/sessionuser/message/', {
             to: userid,
             message: message,
+            type: type,
             headers: {
                 Authorization: $window.sessionStorage.token
             }
@@ -172,6 +202,25 @@ controllers.controller("ChatCtrl", ["$scope", "$rootScope", "$stateParams", "soc
         }
     });
 
+    $scope.receivePicture = function (imageData) {
+        $scope.send(imageData, 'image');
+    };
+
+    $scope.openImage = function (image) {
+        $scope.imageTap = image;
+        $ionicModal.fromTemplateUrl('templates/proveedores/imageModal.html', {
+            scope: $scope,
+            animation: 'slide-in-up'
+        }).then(function (modal) {
+            $scope.modal = modal;
+
+            $scope.modal.show();
+        });
+
+        $scope.closeModal = function () {
+            $scope.modal.hide();
+        };
+    };
 
 }]);
 
@@ -197,15 +246,15 @@ controllers.controller("ProfileCtrl", ["$scope", "$stateParams", "Restangular", 
         $scope.user = resp.data;
     });
 
-    $scope.getInclude = function() {
-        if(parseInt($stateParams.id) !== SessionService.user.id) {
+    $scope.getInclude = function () {
+        if (parseInt($stateParams.id) !== SessionService.user.id) {
             return "templates/proveedores/profile/_profile_footer.html";
         } else {
             return "templates/proveedores/profile/_profile_footer_mine.html";
         }
     };
 
-    $scope.edit = function() {
+    $scope.edit = function () {
         $scope.transitionTo('homepage.perfil.edit');
     }
 }]);

@@ -20,6 +20,7 @@
 /home/fherrero/workspace/test.workspace/abogados/platforms/android/res/drawable-hdpi/ic_action_remove.png \
 /home/fherrero/workspace/test.workspace/abogados/platforms/android/res/drawable-port-hdpi/screen.png \
 /home/fherrero/workspace/test.workspace/abogados/platforms/android/res/drawable/icon.png \
+/home/fherrero/workspace/test.workspace/abogados/platforms/android/res/drawable/notification.png \
 /home/fherrero/workspace/test.workspace/abogados/platforms/android/res/drawable-mdpi/ic_action_previous_item.png \
 /home/fherrero/workspace/test.workspace/abogados/platforms/android/res/drawable-mdpi/icon.png \
 /home/fherrero/workspace/test.workspace/abogados/platforms/android/res/drawable-mdpi/ic_action_next_item.png \
@@ -45,6 +46,7 @@
 /home/fherrero/workspace/test.workspace/abogados/platforms/android/ant-build/res/drawable-hdpi/ic_action_remove.png \
 /home/fherrero/workspace/test.workspace/abogados/platforms/android/ant-build/res/drawable-port-hdpi/screen.png \
 /home/fherrero/workspace/test.workspace/abogados/platforms/android/ant-build/res/drawable/icon.png \
+/home/fherrero/workspace/test.workspace/abogados/platforms/android/ant-build/res/drawable/notification.png \
 /home/fherrero/workspace/test.workspace/abogados/platforms/android/ant-build/res/drawable-mdpi/ic_action_previous_item.png \
 /home/fherrero/workspace/test.workspace/abogados/platforms/android/ant-build/res/drawable-mdpi/icon.png \
 /home/fherrero/workspace/test.workspace/abogados/platforms/android/ant-build/res/drawable-mdpi/ic_action_next_item.png \

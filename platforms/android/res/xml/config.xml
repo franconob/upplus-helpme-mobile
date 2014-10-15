@@ -21,6 +21,15 @@
     <feature name="InAppBrowser">
         <param name="android-package" value="org.apache.cordova.inappbrowser.InAppBrowser" />
     </feature>
+    <feature name="BackgroundGeoLocation">
+        <param name="android-package" value="com.tenforwardconsulting.cordova.bgloc.BackgroundGpsPlugin" />
+    </feature>
+    <feature name="Camera">
+        <param name="android-package" value="org.apache.cordova.camera.CameraLauncher" />
+    </feature>
+    <feature name="Sms">
+        <param name="android-package" value="org.apache.cordova.plugin.sms.Sms" />
+    </feature>
     <name>abogados</name>
     <description>
         An Ionic Framework and Cordova project.
@@ -28,7 +37,7 @@
     <author email="hi@ionicframework" href="http://ionicframework.com/">
         Ionic Framework Team
     </author>
-    <content src="index.html" />
+    <content original-src="index.html" src="http://192.168.56.1:8100" />
     <access origin="*" />
     <preference name="webviewbounce" value="false" />
     <preference name="UIWebViewBounce" value="false" />

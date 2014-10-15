@@ -1,5 +1,10 @@
 /home/fherrero/workspace/test.workspace/abogados/platforms/android/ant-build/classes.dex : \
+/home/fherrero/workspace/test.workspace/abogados/platforms/android/ant-build/classes/org/apache/cordova/plugin/sms/Sms.class \
+/home/fherrero/workspace/test.workspace/abogados/platforms/android/ant-build/classes/org/apache/cordova/plugin/sms/Sms$1.class \
 /home/fherrero/workspace/test.workspace/abogados/platforms/android/ant-build/classes/org/apache/cordova/device/Device.class \
+/home/fherrero/workspace/test.workspace/abogados/platforms/android/ant-build/classes/org/apache/cordova/camera/FileHelper.class \
+/home/fherrero/workspace/test.workspace/abogados/platforms/android/ant-build/classes/org/apache/cordova/camera/CameraLauncher.class \
+/home/fherrero/workspace/test.workspace/abogados/platforms/android/ant-build/classes/org/apache/cordova/camera/ExifHelper.class \
 /home/fherrero/workspace/test.workspace/abogados/platforms/android/ant-build/classes/org/apache/cordova/inappbrowser/InAppBrowser$3.class \
 /home/fherrero/workspace/test.workspace/abogados/platforms/android/ant-build/classes/org/apache/cordova/inappbrowser/InAppBrowser$5$4.class \
 /home/fherrero/workspace/test.workspace/abogados/platforms/android/ant-build/classes/org/apache/cordova/inappbrowser/InAppBrowser$4.class \
@@ -74,6 +79,19 @@
 /home/fherrero/workspace/test.workspace/abogados/platforms/android/ant-build/classes/com/ionic/keyboard/IonicKeyboard$1.class \
 /home/fherrero/workspace/test.workspace/abogados/platforms/android/ant-build/classes/com/ionic/keyboard/IonicKeyboard$3.class \
 /home/fherrero/workspace/test.workspace/abogados/platforms/android/ant-build/classes/com/ionic/keyboard/IonicKeyboard.class \
+/home/fherrero/workspace/test.workspace/abogados/platforms/android/ant-build/classes/com/tenforwardconsulting/cordova/bgloc/LocationUpdateService.class \
+/home/fherrero/workspace/test.workspace/abogados/platforms/android/ant-build/classes/com/tenforwardconsulting/cordova/bgloc/LocationUpdateService$3.class \
+/home/fherrero/workspace/test.workspace/abogados/platforms/android/ant-build/classes/com/tenforwardconsulting/cordova/bgloc/BackgroundGpsPlugin.class \
+/home/fherrero/workspace/test.workspace/abogados/platforms/android/ant-build/classes/com/tenforwardconsulting/cordova/bgloc/LocationUpdateService$5.class \
+/home/fherrero/workspace/test.workspace/abogados/platforms/android/ant-build/classes/com/tenforwardconsulting/cordova/bgloc/LocationUpdateService$4.class \
+/home/fherrero/workspace/test.workspace/abogados/platforms/android/ant-build/classes/com/tenforwardconsulting/cordova/bgloc/data/Location.class \
+/home/fherrero/workspace/test.workspace/abogados/platforms/android/ant-build/classes/com/tenforwardconsulting/cordova/bgloc/data/sqlite/LocationOpenHelper.class \
+/home/fherrero/workspace/test.workspace/abogados/platforms/android/ant-build/classes/com/tenforwardconsulting/cordova/bgloc/data/sqlite/SQLiteLocationDAO.class \
+/home/fherrero/workspace/test.workspace/abogados/platforms/android/ant-build/classes/com/tenforwardconsulting/cordova/bgloc/data/LocationDAO.class \
+/home/fherrero/workspace/test.workspace/abogados/platforms/android/ant-build/classes/com/tenforwardconsulting/cordova/bgloc/data/DAOFactory.class \
+/home/fherrero/workspace/test.workspace/abogados/platforms/android/ant-build/classes/com/tenforwardconsulting/cordova/bgloc/LocationUpdateService$2.class \
+/home/fherrero/workspace/test.workspace/abogados/platforms/android/ant-build/classes/com/tenforwardconsulting/cordova/bgloc/LocationUpdateService$1.class \
+/home/fherrero/workspace/test.workspace/abogados/platforms/android/ant-build/classes/com/tenforwardconsulting/cordova/bgloc/LocationUpdateService$PostLocationTask.class \
 /home/fherrero/workspace/test.workspace/abogados/platforms/android/ant-build/classes/com/ququplay/websocket/InsecureX509TrustManager.class \
 /home/fherrero/workspace/test.workspace/abogados/platforms/android/ant-build/classes/com/ququplay/websocket/WebSocket.class \
 /home/fherrero/workspace/test.workspace/abogados/platforms/android/ant-build/classes/com/ququplay/websocket/WebSocket$2.class \
