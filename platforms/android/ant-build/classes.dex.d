@@ -75,6 +75,8 @@
 /home/fherrero/workspace/test.workspace/abogados/platforms/android/ant-build/classes/org/java_websocket/drafts/Draft$CloseHandshakeType.class \
 /home/fherrero/workspace/test.workspace/abogados/platforms/android/ant-build/classes/org/java_websocket/drafts/Draft_75.class \
 /home/fherrero/workspace/test.workspace/abogados/platforms/android/ant-build/classes/org/java_websocket/drafts/Draft_10.class \
+/home/fherrero/workspace/test.workspace/abogados/platforms/android/ant-build/classes/nl/xservices/plugins/Toast.class \
+/home/fherrero/workspace/test.workspace/abogados/platforms/android/ant-build/classes/nl/xservices/plugins/Toast$1.class \
 /home/fherrero/workspace/test.workspace/abogados/platforms/android/ant-build/classes/com/ionic/keyboard/IonicKeyboard$2.class \
 /home/fherrero/workspace/test.workspace/abogados/platforms/android/ant-build/classes/com/ionic/keyboard/IonicKeyboard$1.class \
 /home/fherrero/workspace/test.workspace/abogados/platforms/android/ant-build/classes/com/ionic/keyboard/IonicKeyboard$3.class \

@@ -6,14 +6,6 @@ controllers.controller("LoginCtrl", ["$scope", "$state", "SessionService", "$ion
     $scope.loginData = {};
     $scope.showBar = false;
 
-    $scope.sendSms = function () {
-        $cordovaSms.send('+543416969784', 'Hola Zurdo, soy el kui', '').then(function (res) {
-            alert('Enviado correctamente: ' + res);
-        }, function (err) {
-            alert('Error enviando: ' + err);
-        });
-    }
-
     return $scope.login = function (credentials) {
         LoadingService.show('Comprobando credenciales...');
         SessionService.login(credentials, function (response) {
@@ -32,7 +24,7 @@ controllers.controller("LoginCtrl", ["$scope", "$state", "SessionService", "$ion
 
 }]);
 
-controllers.controller("MainCtrl", function ($scope, $state, $cordovaLocalNotification, SessionService, $cordovaBackgroundGeolocation) {
+controllers.controller("MainCtrl", function ($scope, $state, $cordovaLocalNotification, SessionService, $cordovaBackgroundGeolocation, $cordovaGeolocation, $window, socket, $cordovaToast) {
     $scope.messages = [];
     $scope.messageCount = 0;
     $scope.user = {};
@@ -42,14 +34,6 @@ controllers.controller("MainCtrl", function ($scope, $state, $cordovaLocalNotifi
     $scope.users = [];
     $scope.useGPS = {
         status: false
-    };
-    var GPSOptions = {
-        notificationTitle: 'GPS Helpme',
-        notificationText: 'GPS Activado',
-        timeout: 100,
-        enableHighAccuracy: true,
-        debug: true
-
     };
 
     $scope.goToMessages = function () {
@@ -82,25 +66,104 @@ controllers.controller("MainCtrl", function ($scope, $state, $cordovaLocalNotifi
         $state.transitionTo('homepage.profile', {id: SessionService.user.id});
     };
 
-    $scope.$watch('useGPS.status', function (oldVal, newVal) {
+    var options = {
+        notificationTitle: 'Background tracking', // <-- android only, customize the title of the notification
+        notificationText: 'ENABLED', // <-- android only, customize the text of the notification
+        debug: true, // <-- enable this hear sounds for background-geolocation life-cycle.
+        url: ENDPOINT + '/gps', // <-- Android ONLY:  your server url to send locations to
+        params: {
+            from: SessionService.user.id
+        },
+        headers: {                                   // <-- Android ONLY:  Optional HTTP headers sent to your configured #url when persisting locations
+            "authorization": $window.sessionStorage.token
+        },
+        timeout: 15000,
+        desiredAccuracy: 10,
+        stationaryRadius: 20,
+        distanceFilter: 30,
+        stopOnTerminate: false, // <-- enable this to clear background location settings when the app terminates
+        enableHighAccuracy: true
+    };
+
+    $scope.$watch('useGPS.status', function (newVal, oldVal) {
+        //var bgGeo = window.plugins.backgroundGeoLocation;
         if (newVal) {
-            console.log('activado GPS');
+            alert('activando gps');
+            $cordovaGeolocation
+                .getCurrentPosition({
+                    enableHighAccuracy: false
+                })
+                .then(function (position) {
+                    alert('gps activado');
+                    socket.emit('post', '/gps/receive', {
+                        position: position,
+                        from: SessionService.user.id
+                    });
+                }, function (err) {
+                    alert(err);
+                });
+            /*
+             window.navigator.geolocation.getCurrentPosition(function (location) {
+             alert('Location from Phonegap', JSON.stringify(location));
+             }, function (err) {
+             alert(JSON.stringify(err));
+             },
+             options
+             );
+
+
+             var callbackFn = function (location) {
+             alert('[js] BackgroundGeoLocation callback:  ' + location.latitude + ',' + location.longitude);
+             };
+
+             var failureFn = function (error) {
+             alert('BackgroundGeoLocation error');
+             };
+
+             // BackgroundGeoLocation is highly configurable.
+             bgGeo.configure(callbackFn, failureFn, {
+             url: ENDPOINT + '/gps/receive', // <-- Android ONLY:  your server url to send locations to
+             params: {
+             },
+             headers: {                                   // <-- Android ONLY:  Optional HTTP headers sent to your configured #url when persisting locations
+             "authorization": $window.sessionStorage.token
+             },
+             desiredAccuracy: 10,
+             stationaryRadius: 20,
+             distanceFilter: 30,
+             notificationTitle: 'Background tracking', // <-- android only, customize the title of the notification
+             notificationText: 'ENABLED', // <-- android only, customize the text of the notification
+             debug: true, // <-- enable this hear sounds for background-geolocation life-cycle.
+             stopOnTerminate: false, // <-- enable this to clear background location settings when the app terminates
+             enableHighAccuracy: false,
+             });
+
+             bgGeo.start();
+
+             */
         } else {
-            //$cordovaBackgroundGeolocation.stop();
+            //bgGeo.stop();
         }
     });
+
+    $scope.$on('gps.received', function (evt, message) {
+        console.log(message);
+        $cordovaToast.showLongCenter('Usuario ' + message.data.user + 'ubicado en: ' + message.data.latitude + message.data.longitude)
+    })
 });
 
 controllers.controller("HomepageCtrl", function ($scope) {
 });
 
 controllers.controller("ProveedoresCtrl", [
-    "$scope", "socket", "$window", "$ionicActionSheet", "$state", function ($scope, socket, $window, $ionicActionSheet, $state) {
+    "$scope", "socket", "$window", "$ionicActionSheet", "$state", "SessionService", function ($scope, socket, $window, $ionicActionSheet, $state, SessionService) {
         $scope.$on('user.added', function (evt, args) {
             $scope.$apply(function () {
                 $scope.users.push(args);
             })
         });
+
+
 
         $scope.$on('user.destroyed', function (evt, id) {
             var index = _.findIndex($scope.users, function (user) {

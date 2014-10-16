@@ -74,6 +74,7 @@
 /home/fherrero/workspace/test.workspace/abogados/platforms/android/assets/www/plugins/org.apache.cordova.camera \
 /home/fherrero/workspace/test.workspace/abogados/platforms/android/assets/www/plugins/com.ionic.keyboard \
 /home/fherrero/workspace/test.workspace/abogados/platforms/android/assets/www/plugins/org.apache.cordova.inappbrowser \
+/home/fherrero/workspace/test.workspace/abogados/platforms/android/assets/www/plugins/nl.x-services.plugins.toast \
 /home/fherrero/workspace/test.workspace/abogados/platforms/android/assets/www/plugins/com.ququplay.websocket.WebSocket \
 /home/fherrero/workspace/test.workspace/abogados/platforms/android/assets/www/plugins/org.transistorsoft.cordova.background-geolocation \
 /home/fherrero/workspace/test.workspace/abogados/platforms/android/assets/www/plugins/org.apache.cordova.plugin.sms \
@@ -89,6 +90,10 @@
 /home/fherrero/workspace/test.workspace/abogados/platforms/android/assets/www/plugins/com.ionic.keyboard/www/keyboard.js \
 /home/fherrero/workspace/test.workspace/abogados/platforms/android/assets/www/plugins/org.apache.cordova.inappbrowser/www \
 /home/fherrero/workspace/test.workspace/abogados/platforms/android/assets/www/plugins/org.apache.cordova.inappbrowser/www/inappbrowser.js \
+/home/fherrero/workspace/test.workspace/abogados/platforms/android/assets/www/plugins/nl.x-services.plugins.toast/www \
+/home/fherrero/workspace/test.workspace/abogados/platforms/android/assets/www/plugins/nl.x-services.plugins.toast/test \
+/home/fherrero/workspace/test.workspace/abogados/platforms/android/assets/www/plugins/nl.x-services.plugins.toast/www/Toast.js \
+/home/fherrero/workspace/test.workspace/abogados/platforms/android/assets/www/plugins/nl.x-services.plugins.toast/test/tests.js \
 /home/fherrero/workspace/test.workspace/abogados/platforms/android/assets/www/plugins/com.ququplay.websocket.WebSocket/www \
 /home/fherrero/workspace/test.workspace/abogados/platforms/android/assets/www/plugins/com.ququplay.websocket.WebSocket/www/phonegap-websocket.js \
 /home/fherrero/workspace/test.workspace/abogados/platforms/android/assets/www/plugins/org.transistorsoft.cordova.background-geolocation/www \

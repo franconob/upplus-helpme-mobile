@@ -3,16 +3,11 @@ function SocketIO(io, $rootScope, SessionService) {
     this.socket = null;
 
     this.users = [];
-    this.pendingRequests = [];
-
-    $rootScope.users = [];
-    $rootScope.usuario = {};
 
     this.emit = function (method, path, payload, cb) {
         var self = this;
         // `cb` is optional
-        if (typeof cb === 'string') {
-            method = cb;
+        if (typeof cb === 'undefined') {
             cb = null;
         }
 
@@ -28,12 +23,12 @@ function SocketIO(io, $rootScope, SessionService) {
             this.socket.on('connect', function () {
                 self.bindEvents();
                 self.socket[method](path, payload, function (response) {
-                    return cb(response);
+                    return cb && cb(response);
                 });
             })
         } else {
             this.socket[method](path, payload, function (response) {
-                return cb(response);
+                return cb && cb(response);
             });
         }
 
@@ -42,9 +37,7 @@ function SocketIO(io, $rootScope, SessionService) {
 
     this.bindEvents = function () {
         var self = this;
-        //this.socket.on('connect', function () {
         self.socket.on('sessionuser', function (message) {
-            console.log('evento!', message);
             switch (message.verb) {
                 case 'updated':
                 {
@@ -60,7 +53,7 @@ function SocketIO(io, $rootScope, SessionService) {
                 }
                 case 'created':
                 {
-                    $rootScope.users.push(message.data);
+                    self.users.push(message.data);
                     $rootScope.$broadcast('user.added', message.data);
                     break;
                 }
@@ -78,7 +71,22 @@ function SocketIO(io, $rootScope, SessionService) {
                 }
             }
         });
-        //});
+
+        self.socket.on('gps', function (message) {
+            switch (message.verb) {
+                case 'created':
+                {
+                    $rootScope.$broadcast('gps.received', message);
+                    break;
+                }
+                case 'updated':
+                {
+                    $rootScope.$broadcast('gps.received', message);
+                    break;
+                }
+            }
+        })
+
     }
 }
 
