@@ -39,6 +39,7 @@ function SocketIO(io, $rootScope, SessionService) {
     var self = this;
     self.socket.on('sessionuser', function (message) {
       console.log(message);
+      /** @namespace message.verb */
       switch (message.verb) {
         case 'updated':
         {
@@ -62,16 +63,16 @@ function SocketIO(io, $rootScope, SessionService) {
 
         case 'destroyed':
         {
-          if (message.previous.socketId == self.socket.socket.sessionid) {
+          if (message.previous && message.previous.socketId == self.socket.socket.sessionid) {
             $rootScope.$broadcast('user.session.close');
           } else {
             var index = _.findIndex(self.users, function (user) {
               return user.id == message.id;
             });
-            self.user.splice(index, 1);
-            $rootScope.$broadcast('user.destroyed', message.id);
-          }
+            self.users.splice(index, 1);
+            $rootScope.$broadcast('user.destroyed', index);
 
+          }
           break;
         }
 

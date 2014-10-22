@@ -24,7 +24,7 @@ controllers.controller("LoginCtrl", ["$scope", "$state", "SessionService", "$ion
 
 }]);
 
-controllers.controller("MainCtrl", function ($scope, $state, $cordovaLocalNotification, SessionService, $cordovaBackgroundGeolocation, $cordovaGeolocation, $window, socket, $cordovaToast) {
+controllers.controller("MainCtrl", function ($scope, $state, $cordovaLocalNotification, SessionService, $cordovaBackgroundGeolocation, $cordovaGeolocation, $window, socket, $cordovaToast, $ionicPopup) {
   $scope.messages = [];
   $scope.messageCount = 0;
   $scope.user = {};
@@ -112,10 +112,14 @@ controllers.controller("MainCtrl", function ($scope, $state, $cordovaLocalNotifi
     $cordovaToast.showLongCenter('Usuario ' + message.data.user + 'ubicado en: ' + message.data.latitude + message.data.longitude)
   });
 
-  $scope.$on('user.session.close', function(evt, message) {
+  $scope.$on('user.session.close', function () {
     SessionService.logout();
-    alert('Sesion iniciada en otra ubicación. Se cerrá sesión aqui.');
-    $state.transitionTo('login')
+    $ionicPopup.alert({
+      title: 'Nueva sesión',
+      template: 'Se ha iniciado sesión en otra ubicación'
+    }).then(function () {
+      $state.transitionTo('login')
+    });
   });
 
 });
@@ -132,29 +136,17 @@ controllers.controller("ProveedoresCtrl", [
       })
     });
 
-    /*
-     $scope.$on('user.added', function (evt, args) {
-     $scope.$apply(function () {
-     $scope.users.push(args);
-     })
-     });
-     */
-
-    $scope.$watchCollection('SessionService.users', function (newCol, oldCol) {
-      $scope.users = newCol;
+    $scope.$on('user.added', function (evt, args) {
+      $scope.$apply(function () {
+        $scope.users.push(args);
+      })
     });
 
-    /*
-     $scope.$on('user.destroyed', function (evt, id) {
-     var index = _.findIndex($scope.users, function (user) {
-     return user.id == id
-     });
-
-     $scope.$apply(function () {
-     $scope.users.splice(index, 1);
-     });
-     });
-     */
+    $scope.$on('user.destroyed', function (evt, index) {
+      $scope.$apply(function () {
+        $scope.users.splice(index, 1);
+      });
+    });
 
 
     $scope.openSheet = function (id) {
