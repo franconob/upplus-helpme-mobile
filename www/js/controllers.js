@@ -66,6 +66,13 @@ controllers.controller("MainCtrl", function ($scope, $state, $cordovaLocalNotifi
     $state.transitionTo('homepage.profile', {id: SessionService.user.id});
   };
 
+  $scope.logout = function(){
+    SessionService.logout(socket, function(resp) {
+      $state.transitionTo('login');
+    })
+  };
+
+
   var options = {
     notificationTitle: 'Background tracking', // <-- android only, customize the title of the notification
     notificationText: 'ENABLED', // <-- android only, customize the text of the notification
@@ -166,6 +173,10 @@ controllers.controller("ProveedoresCtrl", [
           }
         }
       })
+    };
+
+    $scope.loadMore = function() {
+      console.log('aca');
     }
   }
 ])

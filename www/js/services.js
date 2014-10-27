@@ -120,10 +120,14 @@ angular.module('helpme.services', []).factory("SessionService", function (Restan
       });
     },
 
-    logout: function logout() {
-      delete $window.sessionStorage['token'];
-      self.authenticated = false;
-      self.user = {};
+    logout: function logout(socket, callback) {
+      socket.emit('delete', '/user/logout', function (resp) {
+        delete $window.sessionStorage['token'];
+        self.authenticated = false;
+        self.user = {};
+        return callback(resp);
+      });
+
     }
   }
 }).provider('socket', function socketProvider() {
@@ -161,4 +165,6 @@ angular.module('helpme.services', []).factory("SessionService", function (Restan
       $ionicLoading.hide();
     }
   }
-});
+}).factory('Conversations', ["Restangular", function (Restangular) {
+
+}]);
