@@ -151,13 +151,11 @@ controllers.controller("ProveedoresCtrl", [
 
     $scope.$on('user.logged_in', function (evt, index) {
       $scope.$apply(function () {
-        //$scope.users[index].online = true;
       });
     });
 
     $scope.$on('user.destroyed', function (evt, index) {
       $scope.$apply(function () {
-        //$scope.users[index].online = false;
       });
     });
 
@@ -181,8 +179,22 @@ controllers.controller("ProveedoresCtrl", [
       })
     };
 
+    var hasResults = true;
+
+    $scope.needToLoad = function () {
+      return socket.users.length >= 10 && hasResults;
+    };
+
     $scope.loadMore = function () {
-      console.log('aca');
+      socket.emit('get', '/sessionuser/list', {skip: socket.users.length}, function (users) {
+        if (users.length == 0) {
+          hasResults = false;
+        }
+        $scope.$apply(function () {
+          $scope.users = socket.users = socket.users.concat(users);
+          $scope.$broadcast('scroll.infiniteScrollComplete');
+        })
+      })
     }
   }
 ])
