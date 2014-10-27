@@ -55,7 +55,16 @@ function SocketIO(io, $rootScope, SessionService) {
         }
         case 'created':
         {
-          console.log('usuario creado!');
+          var userIndex = _.findIndex(self.users, function (user) {
+            return user.userid == message.id;
+          });
+
+          // Si userIndex > 0, el usuario se conecto. No se creo!
+          if (userIndex > -1) {
+            self.users[userIndex] = message.data;
+            $rootScope.$broadcast('user.logged_in', userIndex);
+            break;
+          }
           self.users.push(message.data);
           $rootScope.$broadcast('user.added', message.data);
           break;
@@ -67,11 +76,10 @@ function SocketIO(io, $rootScope, SessionService) {
             $rootScope.$broadcast('user.session.close');
           } else {
             var index = _.findIndex(self.users, function (user) {
-              return user.id == message.id;
+              return user.userid == message.id;
             });
-            self.users.splice(index, 1);
+            self.users[index].online = false;
             $rootScope.$broadcast('user.destroyed', index);
-
           }
           break;
         }

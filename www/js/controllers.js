@@ -66,8 +66,8 @@ controllers.controller("MainCtrl", function ($scope, $state, $cordovaLocalNotifi
     $state.transitionTo('homepage.profile', {id: SessionService.user.id});
   };
 
-  $scope.logout = function(){
-    SessionService.logout(socket, function(resp) {
+  $scope.logout = function () {
+    SessionService.logout(socket, function (resp) {
       $state.transitionTo('login');
     })
   };
@@ -139,7 +139,7 @@ controllers.controller("ProveedoresCtrl", [
 
     socket.emit('get', '/sessionuser/list', function (data) {
       $scope.$apply(function () {
-        $scope.users = data;
+        $scope.users = socket.users = data;
       })
     });
 
@@ -149,9 +149,15 @@ controllers.controller("ProveedoresCtrl", [
       })
     });
 
+    $scope.$on('user.logged_in', function (evt, index) {
+      $scope.$apply(function () {
+        //$scope.users[index].online = true;
+      });
+    });
+
     $scope.$on('user.destroyed', function (evt, index) {
       $scope.$apply(function () {
-        $scope.users.splice(index, 1);
+        //$scope.users[index].online = false;
       });
     });
 
@@ -175,7 +181,7 @@ controllers.controller("ProveedoresCtrl", [
       })
     };
 
-    $scope.loadMore = function() {
+    $scope.loadMore = function () {
       console.log('aca');
     }
   }

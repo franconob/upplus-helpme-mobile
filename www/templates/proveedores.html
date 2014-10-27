@@ -16,11 +16,11 @@
       </div>
     </div>
     <ion-list>
-      <ion-item class="item item-avatar item-icon-right" ng-repeat="user in users|filter:keyword"
+      <ion-item class="item item-avatar item-icon-right" ng-repeat="user in users|filter:keyword|orderBy:'online':true"
                 ng-click="openSheet(user.userid)">
         <img ng-src="{{user.juser.profile.avatar}}"/>
 
-        <h2>{{ user.juser.name }}</h2>
+        <h2>({{ user.userid }}) - {{ user.juser.name }}</h2>
 
         <p>{{user.juser.extras.areaPractica}}</p>
 
