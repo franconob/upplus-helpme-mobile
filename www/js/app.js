@@ -63,12 +63,12 @@ angular.module("helpme", ["ionic", "restangular", "helpme.controllers", "helpme.
             data: {
                 requiresLogin: true
             }
-        }).state("homepage.messages", {
-            url: "/proveedores/messages",
+        }).state("homepage.mensajes", {
+            url: "/proveedores/mensajes",
             views: {
                 menuContent: {
-                    templateUrl: "templates/proveedores/messages.html",
-                    controller: "MessagesCtrl"
+                    templateUrl: "templates/proveedores/mensajes.html",
+                    controller: "MensajesCtrl"
                 }
             },
             data: {

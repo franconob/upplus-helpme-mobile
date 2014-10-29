@@ -54,7 +54,7 @@ controllers.controller("MainCtrl", function ($scope, $state, $cordovaLocalNotifi
     $cordovaLocalNotification.add({
       id: 'com.help.upplus4.notification.message',
       title: 'Mensaje recibido',
-      message: message.data.from.name + ': ' + message.data.message,
+      message: message.data.from.name + ': ' + message.data.type == 'text' ? message.data.message : 'Imagen',
       json: {from: message.data.from.userid}
     }).then(function (arg) {
       console.log(arg);
@@ -67,9 +67,8 @@ controllers.controller("MainCtrl", function ($scope, $state, $cordovaLocalNotifi
   };
 
   $scope.logout = function () {
-    SessionService.logout(socket, function (resp) {
-      $state.transitionTo('login');
-    })
+    SessionService.logout();
+    $state.transitionTo('login');
   };
 
 
@@ -214,11 +213,7 @@ controllers.controller("ChatCtrl", ["$scope", "$rootScope", "$stateParams", "soc
     })
   });
 
-  socket.socket.get('/sessionuser/' + userid, {
-    headers: {
-      Authorization: $window.sessionStorage.token
-    }
-  }, function (user) {
+  socket.socket.get('/sessionuser/' + userid, function (user) {
     $scope.user = user;
   });
 
@@ -227,10 +222,7 @@ controllers.controller("ChatCtrl", ["$scope", "$rootScope", "$stateParams", "soc
     socket.socket.post('/sessionuser/message/', {
       to: userid,
       message: message,
-      type: type,
-      headers: {
-        Authorization: $window.sessionStorage.token
-      }
+      type: type
     }, function (data) {
       $scope.$apply(function () {
         $scope.messages.push(data);
@@ -251,7 +243,7 @@ controllers.controller("ChatCtrl", ["$scope", "$rootScope", "$stateParams", "soc
       $cordovaLocalNotification.add({
         id: 'com.help.upplus4.notification.message',
         title: 'Mensaje recibido',
-        message: message.data.from.name + ': ' + message.data.message,
+        message: message.data.from.name + ': ' + message.data.type == 'text' ? message.data.message : 'Imagen',
         json: {to: message.data.from.userid}
       }).then(function (arg) {
         console.log(arg);
@@ -316,6 +308,14 @@ controllers.controller("ProfileCtrl", ["$scope", "$stateParams", "Restangular", 
   }
 }]);
 
-controllers.controller("MessagesCtrl", ["$scope", "socket", function ($scope, socket) {
+controllers.controller("MensajesCtrl", ["$scope", "socket", "$state", function ($scope, socket, $state) {
+  socket.emit('get', '/conversations', function (data) {
+    $scope.$apply(function () {
+      $scope.conversations = data;
+    });
+  });
 
+  $scope.goToChat = function (to) {
+    $state.transitionTo('homepage.chat', {id: to});
+  }
 }]);

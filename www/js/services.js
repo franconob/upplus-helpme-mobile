@@ -38,35 +38,32 @@ function SocketIO(io, $rootScope, SessionService) {
   this.bindEvents = function () {
     var self = this;
     self.socket.on('sessionuser', function (message) {
-      console.log(message);
+      var userIndex;
       /** @namespace message.verb */
       switch (message.verb) {
         case 'updated':
         {
-          _.each($rootScope.users, function (user) {
-            if (user.id == message.id) {
-              $rootScope.$apply(function () {
-                user.name = message.data.name;
-              });
-            }
-          });
 
+          if (message.previous && message.previous.socketId == self.socket.socket.sessionid) {
+            console.log('llega, deslogueando');
+            $rootScope.$broadcast('user.session.close');
+          } else {
+            userIndex = _.findIndex(self.users, {userid: message.id});
+            self.users[userIndex] = _.merge(self.users[userIndex], message.data);
+            if (message.data.online === true) {
+              $rootScope.$broadcast('user.logged_in');
+            } else {
+              $rootScope.$broadcast('user.destroyed')
+            }
+          }
           break;
         }
         case 'created':
         {
-          var userIndex = _.findIndex(self.users, function (user) {
-            return user.userid == message.id;
-          });
-
-          // Si userIndex > 0, el usuario se conecto. No se creo!
-          if (userIndex > -1) {
-            self.users[userIndex] = message.data;
-            $rootScope.$broadcast('user.logged_in', userIndex);
-            break;
+          if (!_.findIndex(self.users, {userid: message.id})) {
+            self.users.push(message.data);
+            $rootScope.$broadcast('user.added', message.data);
           }
-          self.users.push(message.data);
-          $rootScope.$broadcast('user.added', message.data);
           break;
         }
 
@@ -128,14 +125,10 @@ angular.module('helpme.services', []).factory("SessionService", function (Restan
       });
     },
 
-    logout: function logout(socket, callback) {
-      socket.emit('delete', '/user/logout', function (resp) {
-        delete $window.sessionStorage['token'];
-        self.authenticated = false;
-        self.user = {};
-        return callback(resp);
-      });
-
+    logout: function logout() {
+      delete $window.sessionStorage['token'];
+      self.authenticated = false;
+      self.user = {};
     }
   }
 }).provider('socket', function socketProvider() {

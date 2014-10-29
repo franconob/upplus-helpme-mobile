@@ -1,52 +1,52 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no, width=device-width">
-    <title></title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no, width=device-width">
+  <title></title>
 
-    <!--<link href="lib/ionic/css/ionic.css" rel="stylesheet">-->
-    <!--<link href="css/style.css" rel="stylesheet">-->
+  <!--<link href="lib/ionic/css/ionic.css" rel="stylesheet">-->
+  <!--<link href="css/style.css" rel="stylesheet">-->
 
-    <!-- IF using Sass (run gulp sass first), then uncomment below and remove the CSS includes above
-    -->
-    <link href="css/app.css" rel="stylesheet">
+  <!-- IF using Sass (run gulp sass first), then uncomment below and remove the CSS includes above
+  -->
+  <link href="css/app.css" rel="stylesheet">
 
-    <!-- ionic/angularjs js -->
-    <script src="lib/ionic/js/ionic.bundle.js"></script>
+  <!-- ionic/angularjs js -->
+  <script src="lib/ionic/js/ionic.bundle.js"></script>
 
-    <script src="lib/ngCordova/dist/ng-cordova.js"></script>
-    <!-- cordova script (this will be a 404 during development) -->
-    <script src="cordova.js"></script>
+  <script src="lib/ngCordova/dist/ng-cordova.js"></script>
+  <!-- cordova script (this will be a 404 during development) -->
+  <script src="cordova.js"></script>
 
-    <!-- libs -->
-    <script src="lib/lodash/dist/lodash.min.js"></script>
-    <script src="lib/restangular/dist/restangular.min.js"></script>
-    <script src="lib/socket.io-client/dist/socket.io.min.js"></script>
-    <script type="text/javascript" src="lib/igTruncate/dist/igTruncate.min.js"></script>
+  <!-- libs -->
+  <script src="lib/lodash/dist/lodash.min.js"></script>
+  <script src="lib/restangular/dist/restangular.min.js"></script>
+  <script src="lib/socket.io-client/dist/socket.io.min.js"></script>
+  <script type="text/javascript" src="lib/igTruncate/dist/igTruncate.min.js"></script>
 
-    <script src="lib/sails.io.js/sails.io.js"></script>
-    <script type="text/javascript">
-        ENDPOINT = "http://127.0.0.1:1337"
-        io.sails.autoConnect = false;
-        io.sails.url = ENDPOINT;
-        //window.sock = io;
-    </script>
+  <script src="lib/sails.io.js/sails.io.js"></script>
+  <script type="text/javascript">
+    ENDPOINT = "http://192.168.0.12:1337"
+    io.sails.autoConnect = false;
+    io.sails.url = ENDPOINT;
+    //window.sock = io;
+  </script>
 
-    <!-- your app's js -->
-    <script src="js/app.js"></script>
-    <script src="js/services.js"></script>
-    <script src="js/controllers.js"></script>
-    <script src="js/directives.js"></script>
-    <script src="js/filters.js"></script>
+  <!-- your app's js -->
+  <script src="js/app.js"></script>
+  <script src="js/services.js"></script>
+  <script src="js/controllers.js"></script>
+  <script src="js/directives.js"></script>
+  <script src="js/filters.js"></script>
 </head>
 
 <body ng-app="helpme" ng-controller="MainCtrl">
 
 <ion-nav-bar ng-if="showBar">
-    <ion-nav-buttons side="right">
-        hola
-    </ion-nav-buttons>
+  <ion-nav-buttons side="right">
+    hola
+  </ion-nav-buttons>
 </ion-nav-bar>
 <ion-nav-view animation="slide-left-right">
 
@@ -54,19 +54,22 @@
 </body>
 
 <script type="text/ng-template" id="popover.html">
-    <ion-popover-view>
-        <ion-header-bar>
-            <h1 class="title">Mensajes sin leer ({{count}})</h1>
-        </ion-header-bar>
-        <ion-content>
-            <ion-list ng-repeat="msg in messages">
-                <ion-item class="item item-icon-left" ng-click="goToChat(msg)">
-                    <i class="icon ion-chatbox"></i>
-                     {{msg.data.message|truncate:25}}
-                    <span class="item-note">{{ msg.data.from.name }}</span>
-                </ion-item>
-            </ion-list>
-        </ion-content>
-    </ion-popover-view>
+  <ion-popover-view>
+    <ion-header-bar>
+      <h1 class="title">Mensajes sin leer ({{count}})</h1>
+    </ion-header-bar>
+    <ion-content>
+      <ion-list ng-repeat="msg in messages">
+        <ion-item class="item item-icon-left" ng-click="goToChat(msg)">
+          <i class="icon ion-chatbox"></i>
+                     <span ng-switch on="msg.type">
+                       <span ng-switch-when="text" ng-bind="msg.data.message|truncate:25"></span>
+                       <span ng-switch-when="image"><i class="icon ion-camera"></i> Imagen</span>
+                     </span>
+          <span class="item-note">{{ msg.data.from.name }}</span>
+        </ion-item>
+      </ion-list>
+    </ion-content>
+  </ion-popover-view>
 </script>
 </html>
