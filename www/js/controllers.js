@@ -218,14 +218,24 @@ controllers.controller("ChatCtrl", ["$scope", "$rootScope", "$stateParams", "soc
   });
 
   $scope.send = function (message, type) {
-    $scope.message = "";
+    $scope.newMessage = "";
+    $scope.messages.push({
+      id: -1,
+      type: type,
+      message: message,
+      createdAt: new Date(),
+      from: SessionService.user.user,
+      sent: false,
+      received: false
+    })
     socket.socket.post('/sessionuser/message/', {
       to: userid,
       message: message,
       type: type
     }, function (data) {
       $scope.$apply(function () {
-        $scope.messages.push(data);
+        var messageSent = _.findIndex($scope.messages, {id: -1});
+        $scope.messages[messageSent] = data;
         $ionicScrollDelegate.$getByHandle('chat').scrollBottom();
       })
     });
@@ -237,7 +247,9 @@ controllers.controller("ChatCtrl", ["$scope", "$rootScope", "$stateParams", "soc
       $scope.$apply(function () {
         $scope.messages.push(message.data);
         $ionicScrollDelegate.$getByHandle('chat').scrollBottom();
-      })
+      });
+
+      socket.emit('put', '/conversations/' + message.data.id + '/received');
 
     } else {
       $cordovaLocalNotification.add({
@@ -250,6 +262,24 @@ controllers.controller("ChatCtrl", ["$scope", "$rootScope", "$stateParams", "soc
       });
     }
   });
+
+  $scope.$on('conversation.updated', function (evt, message) {
+    var conversationIndex = _.findIndex($scope.messages, {id: message.id});
+    console.log('conv act', conversationIndex, message);
+    $scope.$apply(function () {
+      $scope.messages[conversationIndex].received = true;
+    })
+  });
+
+  /**
+   * @return {boolean}
+   */
+  $scope.ISentIt = function (from) {
+    if(from.userid === SessionService.user.id) {
+      console.log('bien!');
+    }
+    return from.userid === SessionService.user.id;
+  };
 
   $scope.receivePicture = function (imageData) {
     $scope.send(imageData, 'image');

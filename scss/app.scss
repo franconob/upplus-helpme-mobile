@@ -62,4 +62,12 @@ form.ng-submitted input.ng-valid + i.icon.error {
   top: 0;
 }
 
+.icon.chat.small {
+  font-size: 20px;
+}
+
+.chat.icon-double-checkmark > i:last-child {
+  right: 5px;
+}
+
 

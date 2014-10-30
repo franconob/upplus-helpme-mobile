@@ -27,7 +27,7 @@
 
   <script src="lib/sails.io.js/sails.io.js"></script>
   <script type="text/javascript">
-    ENDPOINT = "http://192.168.0.12:1337"
+    ENDPOINT = "http://127.0.0.1:1337"
     io.sails.autoConnect = false;
     io.sails.url = ENDPOINT;
     //window.sock = io;
@@ -62,7 +62,7 @@
       <ion-list ng-repeat="msg in messages">
         <ion-item class="item item-icon-left" ng-click="goToChat(msg)">
           <i class="icon ion-chatbox"></i>
-                     <span ng-switch on="msg.type">
+                     <span ng-switch on="msg.data.type">
                        <span ng-switch-when="text" ng-bind="msg.data.message|truncate:25"></span>
                        <span ng-switch-when="image"><i class="icon ion-camera"></i> Imagen</span>
                      </span>

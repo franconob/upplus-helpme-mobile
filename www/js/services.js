@@ -102,6 +102,15 @@ function SocketIO(io, $rootScope, SessionService) {
           break;
         }
       }
+    });
+
+    self.socket.on('conversation', function(message) {
+      switch(message.verb) {
+        case 'updated': {
+          $rootScope.$broadcast('conversation.updated', message.data);
+          break;
+        }
+      }
     })
 
   }
@@ -110,7 +119,6 @@ function SocketIO(io, $rootScope, SessionService) {
 angular.module('helpme.services', []).factory("SessionService", function (Restangular, $window) {
   return {
     authenticated: false,
-    id: null,
     user: {},
     token: null,
     login: function (credentials, callback) {
