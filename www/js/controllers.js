@@ -51,6 +51,7 @@ controllers.controller("MainCtrl", function ($scope, $state, $cordovaLocalNotifi
 
   $scope.$on('user.messaged', function (evt, message) {
 
+    socket.emit('put', '/conversations/' + message.data.id + '/received');
     $cordovaLocalNotification.add({
       id: 'com.help.upplus4.notification.message',
       title: 'Mensaje recibido',
