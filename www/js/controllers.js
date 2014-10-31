@@ -253,17 +253,14 @@ controllers.controller("ChatCtrl", ["$scope", "$rootScope", "$stateParams", "soc
       $cordovaLocalNotification.add({
         id: 'com.help.upplus4.notification.message',
         title: 'Mensaje recibido',
-        message: message.data.from.name + ': ' + message.data.type == 'text' ? message.data.message : 'Imagen',
+        message: message.data.from.name + ': ' + (message.data.type == 'text' ? message.data.message : 'Imagen'),
         json: {to: message.data.from.userid}
-      }).then(function (arg) {
-        console.log(arg);
       });
     }
   });
 
   $scope.$on('conversation.updated', function (evt, message) {
     var conversationIndex = _.findIndex($scope.messages, {id: message.id});
-    console.log('conv act', conversationIndex, message);
     $scope.$apply(function () {
       $scope.messages[conversationIndex].received = true;
     })
@@ -295,6 +292,10 @@ controllers.controller("ChatCtrl", ["$scope", "$rootScope", "$stateParams", "soc
       $scope.modal.hide();
     };
   };
+
+  $scope.isNotRead = function(message) {
+    return !message.read && message.from.userid !== SessionService.user.id;
+  }
 
 }]);
 

@@ -13,12 +13,12 @@
                 ng-click="goToChat(conversation.user.id)">
         <img ng-src="{{conversation.user.profile.avatar}}"/>
 
-        <h2>{{ conversation.user.name }}</h2>
+        <h2 ng-class="{'conversation-not-read': isNotRead()}">{{ conversation.user.name }}</h2>
 
         <span class="item-note">{{ conversation.createdAt|date:'medium'}}</span>
 
         <div ng-switch on="conversation.type">
-          <p ng-switch-when="text">{{conversation.message}}</p>
+          <p ng-class="{'conversation-not-read': isNotRead()}" ng-switch-when="text">{{conversation.message}}</p>
 
           <p ng-switch-when="image"><i class="icon ion-camera"></i> Imagen</p>
         </div>
