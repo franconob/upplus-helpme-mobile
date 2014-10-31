@@ -43,9 +43,7 @@ controllers.controller("MainCtrl", function ($scope, $state, $cordovaLocalNotifi
 
   $scope.$on('notification.local.click', function (evt, data) {
     if (data.id == 'com.help.upplus4.notification.message') {
-      $scope.apply(function () {
-        $state.transitionTo('homepage.chat', {id: data.json.from})
-      })
+      $state.transitionTo('homepage.chat', {id: data.json.from})
     }
   });
 
@@ -55,10 +53,9 @@ controllers.controller("MainCtrl", function ($scope, $state, $cordovaLocalNotifi
     $cordovaLocalNotification.add({
       id: 'com.help.upplus4.notification.message',
       title: 'Mensaje recibido',
-      message: message.data.from.name + ': ' + message.data.type == 'text' ? message.data.message : 'Imagen',
+      message: message.data.from.name + ': ' + (message.data.type == 'text' ? message.data.message : 'Imagen'),
+      autoCancel: true,
       json: {from: message.data.from.userid}
-    }).then(function (arg) {
-      console.log(arg);
     });
     $scope.incommingMessages.push(message);
   });
@@ -276,9 +273,6 @@ controllers.controller("ChatCtrl", ["$scope", "$rootScope", "$stateParams", "soc
    * @return {boolean}
    */
   $scope.ISentIt = function (from) {
-    if(from.userid === SessionService.user.id) {
-      console.log('bien!');
-    }
     return from.userid === SessionService.user.id;
   };
 
